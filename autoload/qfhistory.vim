@@ -3,7 +3,7 @@
 " File:         autoload/qfhistory.vim
 " Author:       bfrg <https://github.com/bfrg>
 " Website:      https://github.com/bfrg/vim-qf-history
-" Last Change:  Feb 17, 2020
+" Last Change:  Feb 18, 2020
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
 
@@ -43,7 +43,7 @@ function! qfhistory#open(loclist) abort
     let nr = Xgetlist({'nr': '$'}).nr
 
     if !nr
-        echomsg 'No entries'
+        echo 'No ' .. (a:loclist ? 'location' : 'quickfix') .. ' lists'
         return
     endif
 
