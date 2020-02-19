@@ -3,7 +3,7 @@
 " File:         plugin/qfhistory.vim
 " Author:       bfrg <https://github.com/bfrg>
 " Website:      https://github.com/bfrg/vim-qf-history
-" Last Change:  Feb 17, 2020
+" Last Change:  Feb 19, 2020
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
 
@@ -17,9 +17,6 @@ set cpoptions&vim
 
 command! Chistory call qfhistory#open(0)
 command! Lhistory call qfhistory#open(1)
-
-nnoremap <silent> <plug>(chistory-popup) :<c-u>call qfhistory#open(0)<cr>
-nnoremap <silent> <plug>(lhistory-popup) :<c-u>call qfhistory#open(1)<cr>
 
 let &cpoptions = s:cpo_save
 unlet s:cpo_save

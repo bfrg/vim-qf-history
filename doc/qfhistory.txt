@@ -25,20 +25,6 @@ Commands ~
             Same as |:Chistory|, but display the |location-list| history of
             the current window. This is similar to |:lhistory|.
 
-Mappings ~
-
-<plug>(chistory-popup)                                *<plug>(chistory-popup)*
-            Same as |:Chistory|.
-
-            Example: >
-                nmap <space>ch <plug>(chistory-popup)
-<
-<plug>(lhistory-popup)                                *<plug>(lhistory-popup)*
-            Same as |:Lhistory|.
-
-            Example: >
-                nmap <space>lh <plug>(lhistory-popup)
-<
                                                     *qfhistory-popup-mappings*
 Popup window mappings ~
 

@@ -16,21 +16,7 @@ current list, similar to `:chistory`.
 Same as `:Chistory`, but display the `location-list` history of the current
 window, similar to `:lhistory`.
 
-#### `<Plug>` mappings
-
-If you prefer mappings over commands, use the two mappings
-`<plug>(chistory-popup)` and `<plug>(lhistory-popup)`.
-
-Example:
-```vim
-" Open quickfix history
-nmap <space>ch <plug>(chistory-popup)
-
-" Open location-list history of current window
-nmap <space>lh <plug>(lhistory-popup)
-```
-
-#### Popup window mappings
+#### Popup mappings
 
 Use <kbd>j</kbd>, <kbd>k</kbd>, <kbd>g</kbd> and <kbd>G</kbd> to move the
 cursorline in the menu, <kbd>[0-9]</kbd> selects the respective entry. Hit
