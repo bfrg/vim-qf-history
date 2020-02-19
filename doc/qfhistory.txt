@@ -83,27 +83,23 @@ variable g:qfhistory. The following keys are supported:
 
 Examples ~
 >
-    " Border with round corners and no padding inside
-    let g:qfhistory = {
-            \ 'padding': [0,0,0,0],
-            \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
-            \ }
-
-    " Border with round corners, but no window title
-    let g:qfhistory = {
-            \ 'title': 0,
-            \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
-            \ }
-
-    " No border and no popup window title
+    " Don't draw any window border and disable the window title
     let g:qfhistory = {'border': [0,0,0,0], 'title': 0}
 
-    " Empty border with window title and padding inside
+    " Draw an empty border with window title
+    let g:qfhistory = {'border': [], 'borderchars': [' ']}
+
+    " Draw a border with round corners, no padding inside
     let g:qfhistory = {
-            \ 'padding': [1,1,1,1],
-            \ 'border': [],
-            \ 'borderchars': [' ']
-            \ }
+        \ 'padding': [0,0,0,0],
+        \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
+        \ }
+
+    " Draw a border with round corners, no window title, use default padding
+    let g:qfhistory = {
+        \ 'title': 0,
+        \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
+        \ }
 <
                                                          *qfhistory-highlight*
 Highlight Groups ~

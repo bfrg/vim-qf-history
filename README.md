@@ -26,7 +26,7 @@ the selected list the current list.
 
 ## Configuration
 
-#### `g:qfhistory`
+### `g:qfhistory`
 
 The appearance of the popup window can be configured through the dictionary
 variable `g:qfhistory`. The following keys are supported:
@@ -39,7 +39,9 @@ variable `g:qfhistory`. The following keys are supported:
 | `borderchars`     | List with characters used for drawing the window border.            | `['─', '│', '─', '│', '┌', '┐', '┘', '└']`  |
 | `borderhighlight` | List with highlight group names used for drawing the border.        | `[QfHistory]`                               |
 
-#### Highlighting
+**Note:** when only one `borderchars` is specified, it is used for all sides.
+
+### Highlighting
 
 The highlighting of the popup window can be changed through the following
 highlight groups:
@@ -50,6 +52,42 @@ highlight groups:
 | `QfHistoryHeader`   | Top line of the quickfix-history list.    | `Title`   |
 | `QfHistoryCurrent`  | Character marking the current error list. | `Title`   |
 | `QfHistoryEmpty`    | Empty error list.                         | `Comment` |
+
+### Examples
+
+Open `quickfix` and `location-list` history with
+<kbd>Leader</kbd><kbd>c</kbd><kbd>h</kbd> and
+<kbd>Leader</kbd><kbd>l</kbd><kbd>h</kbd>, respectively:
+```vim
+nnoremap <Leader>ch :<C-u>Chistory<CR>
+nnoremap <Leader>lh :<C-u>Lhistory<CR>
+```
+
+Don't draw any window border and disable the window title:
+```vim
+let g:qfhistory = {'border': [0,0,0,0], 'title': 0}
+```
+
+Draw an empty border with window title:
+```vim
+let g:qfhistory = {'border': [], 'borderchars': [' ']}
+```
+
+Draw a border with round corners, no padding inside:
+```vim
+let g:qfhistory = {
+    \ 'padding': [0,0,0,0],
+    \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
+    \ }
+```
+
+Draw a border with round corners, no window title, and default padding:
+```vim
+let g:qfhistory = {
+    \ 'title': 0,
+    \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
+    \ }
+```
 
 
 ## Installation
