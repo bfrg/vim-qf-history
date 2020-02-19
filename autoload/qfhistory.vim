@@ -15,6 +15,16 @@ hi def link QfHistoryHeader     Title
 hi def link QfHistoryCurrent    Title
 hi def link QfHistoryEmpty      Comment
 
+let s:defaults = {
+        \ 'title': 1,
+        \ 'padding': [1,1,1,1],
+        \ 'border': [],
+        \ 'borderchars': ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
+        \ 'borderhighlight': []
+        \ }
+
+let s:get = {k -> get(get(g:, 'qfhistory', s:defaults), k, get(s:defaults, k))}
+
 function! s:popup_callback(loclist, winid, result) abort
     if a:result < 1
         return
@@ -61,14 +71,15 @@ function! qfhistory#open(loclist) abort
     endfor
 
     let winid = popup_create(qflist, {
-            \ 'border': [],
-            \ 'borderchars': ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
-            \ 'padding': [1,1,1,1],
+            \ 'padding': s:get('padding'),
+            \ 'border': s:get('border'),
+            \ 'borderchars': s:get('borderchars'),
+            \ 'borderhighlight': s:get('borderhighlight'),
             \ 'cursorline': 1,
             \ 'wrap': v:false,
             \ 'mapping': v:false,
             \ 'highlight': 'QfHistory',
-            \ 'title': (a:loclist ? ' Location-list History' : ' Quickfix History'),
+            \ 'title': s:get('title') ? (a:loclist ? ' Location-list History' : ' Quickfix History') : '',
             \ 'callback': funcref('s:popup_callback', [a:loclist]),
             \ 'filter': funcref('s:popup_filter', [a:loclist])
             \ })

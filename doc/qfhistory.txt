@@ -46,6 +46,68 @@ q           Cancel the popup menu.
 ==============================================================================
 CONFIGURATION                                               *qfhistory-config*
 
+g:qfhistory                                                      *g:qfhistory*
+
+The appearance of the popup window can be configured through the |Dictionary|
+variable g:qfhistory. The following keys are supported:
+
+                                                           *qfhistory.padding*
+    padding         List with numbers defining the padding inside the popup
+                    window: [top, right, bottom, left]
+                    Default: [1,1,1,1]
+
+                                                            *qfhistory.border*
+    border          List with numbers (0 or 1) specifying whether to draw a
+                    border around the popup window.
+                    Default: [1,1,1,1]
+
+                    Note: when the top border is disabled, no window title
+                    will be shown. If you want an empty border and keep the
+                    window title specify a whitespace character in
+                    |qfhistory.borderchars|.
+
+                                                       *qfhistory.borderchars*
+    borderchars     List with characters used for drawing the border around
+                    the popup window. Set this entry to [' '] to draw an empty
+                    border around the window while keeping the window title.
+                    Default: ['─', '│', '─', '│', '┌', '┐', '┘', '└']
+
+                                                   *qfhistory.borderhighlight*
+    borderhighlight List of highlight group names used for drawing the border.
+                    See |popup_create-arguments| for more details.
+                    Default: same as popup window, see |hl-QfHistory| below.
+
+                                                             *qfhistory.title*
+    title           Set this to 0 to disable the window title.
+                    Default: 1
+
+Examples ~
+>
+    " Border with round corners and no padding inside
+    let g:qfhistory = {
+            \ 'padding': [0,0,0,0],
+            \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
+            \ }
+
+    " Border with round corners, but no window title
+    let g:qfhistory = {
+            \ 'title': 0,
+            \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
+            \ }
+
+    " No border and no popup window title
+    let g:qfhistory = {'border': [0,0,0,0], 'title': 0}
+
+    " Empty border with window title and padding inside
+    let g:qfhistory = {
+            \ 'padding': [1,1,1,1],
+            \ 'border': [],
+            \ 'borderchars': [' ']
+            \ }
+<
+                                                         *qfhistory-highlight*
+Highlight Groups ~
+
 Currently only one highlight group is used by the plugin:
                                                                 *hl-QfHistory*
 QfHistory           Normal text in the popup window. This is the equivalent of

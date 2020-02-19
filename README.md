@@ -19,14 +19,29 @@ window, similar to `:lhistory`.
 #### Popup mappings
 
 Use <kbd>j</kbd>, <kbd>k</kbd>, <kbd>g</kbd> and <kbd>G</kbd> to move the
-cursorline in the menu, <kbd>[0-9]</kbd> selects the respective entry. Hit
-<kbd>q</kbd> to cancel the popup menu, and <kbd>Enter</kbd> to make the selected
-list the current list.
+cursorline in the menu, <kbd>0</kbd> to <kbd>9</kbd> selects the respective
+entry. Press <kbd>q</kbd> to cancel the popup menu, and <kbd>Enter</kbd> to make
+the selected list the current list.
 
 
 ## Configuration
 
-The appearance of the popup window can be changed through the following
+#### `g:qfhistory`
+
+The appearance of the popup window can be configured through the dictionary
+variable `g:qfhistory`. The following keys are supported:
+
+| Key               | Description                                                         | Default                                     |
+| ----------------- | ------------------------------------------------------------------- | ------------------------------------------- |
+| `title`           | Whether to show a popup window title (`0` or `1`).                  | `1`                                         |
+| `padding`         | List with numbers defining the padding inside the popup window.     | `[1,1,1,1]`                                 |
+| `border`          | List with numbers (`0` or `1`) specifying whether to draw a border. | `[1,1,1,1]`                                 |
+| `borderchars`     | List with characters used for drawing the window border.            | `['─', '│', '─', '│', '┌', '┐', '┘', '└']`  |
+| `borderhighlight` | List with highlight group names used for drawing the border.        | `[QfHistory]`                               |
+
+#### Highlighting
+
+The highlighting of the popup window can be changed through the following
 highlight groups:
 
 | Highlight group     | Description                               | Default   |
