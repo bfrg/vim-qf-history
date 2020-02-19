@@ -26,8 +26,15 @@ list the current list.
 
 ## Configuration
 
-The highlighting of the popup window can be changed through the highlight group
-`QfHistory`. Default: `Pmenu`.
+The appearance of the popup window can be changed through the following
+highlight groups:
+
+| Highlight group     | Description                               | Default   |
+| ------------------- | ----------------------------------------- | --------- |
+| `QfHistory`         | Popup window background and normal text.  | `Pmenu`   |
+| `QfHistoryHeader`   | Top line of the quickfix-history list.    | `Title`   |
+| `QfHistoryCurrent`  | Character marking the current error list. | `Title`   |
+| `QfHistoryEmpty`    | Empty error list.                         | `Comment` |
 
 
 ## Installation

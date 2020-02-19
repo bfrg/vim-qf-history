@@ -51,5 +51,14 @@ Currently only one highlight group is used by the plugin:
 QfHistory           Normal text in the popup window. This is the equivalent of
                     the |hl-Normal| highlight group in regular windows.
                     Default: |hl-Pmenu|
+                                                          *hl-QfHistoryHeader*
+QfHistoryHeader     Top line of the quickfix-history list.
+                    Default: |hl-Title|
+                                                         *hl-QfHistoryCurrent*
+QfHistoryCurrent    Character marking the current error list.
+                    Default: |hl-Title|
+                                                           *hl-QfHistoryEmpty*
+QfHistoryEmpty      Empty error lists.
+                    Default: Comment (see |group-name|)
 
  vim:tw=78:et:ft=help:norl:

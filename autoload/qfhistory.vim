@@ -10,7 +10,10 @@
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
-hi def link QfHistory Pmenu
+hi def link QfHistory           Pmenu
+hi def link QfHistoryHeader     Title
+hi def link QfHistoryCurrent    Title
+hi def link QfHistoryEmpty      Comment
 
 function! s:popup_callback(loclist, winid, result) abort
     if a:result < 1
@@ -71,6 +74,11 @@ function! qfhistory#open(loclist) abort
             \ })
 
     call popup_filter_menu(winid, 'j')
+
+    call matchadd('QfHistoryHeader', '\%^.*$', 1, 100000, {'window': winid})
+    call matchadd('QfHistoryEmpty', '^>\=\zs\s*\d\+\s\+0.*', 1, 100001, {'window': winid})
+    call matchadd('QfHistoryCurrent', '^>', 2, 100002, {'window': winid})
+
     return winid
 endfunction
 
