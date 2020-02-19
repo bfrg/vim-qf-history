@@ -3,7 +3,7 @@
 " File:         autoload/qfhistory.vim
 " Author:       bfrg <https://github.com/bfrg>
 " Website:      https://github.com/bfrg/vim-qf-history
-" Last Change:  Feb 18, 2020
+" Last Change:  Feb 19, 2020
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
 
@@ -20,13 +20,13 @@ function! s:popup_callback(loclist, winid, result) abort
 endfunction
 
 function! s:popup_filter(loclist, winid, key) abort
-    if a:key ==# 'j'
+    if a:key ==# 'j' || a:key ==# "\<down>"
         call win_execute(a:winid, line('.', a:winid) == line('$', a:winid) ? '2' : 'normal! +')
-    elseif a:key ==# 'k'
+    elseif a:key ==# 'k' || a:key ==# "\<up>"
         call win_execute(a:winid, line('.', a:winid) == 2 ? '$' : 'normal! -')
-    elseif a:key ==# 'g'
+    elseif a:key ==# 'g' || a:key ==# "\<home>"
         call win_execute(a:winid, '2')
-    elseif a:key ==# 'G'
+    elseif a:key ==# 'G' || a:key ==# "\<end>"
         call win_execute(a:winid, '$')
     elseif a:key =~# '\d'
         call win_execute(a:winid, a:key == 0 ? '$' : string(a:key + 1))

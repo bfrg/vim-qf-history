@@ -42,13 +42,13 @@ Mappings ~
                                                     *qfhistory-popup-mappings*
 Popup window mappings ~
 
-j           Move cursorline down one line.
+j, <Down>   Move cursorline down one line.
 
-k           Move cursorline up one line.
+k, <Up>     Move cursorline up one line.
 
-g           Move cursorline to the top.
+g, <Home>   Move cursorline to the top.
 
-G           Move cursorline to the bottom.
+G, <End>    Move cursorline to the bottom.
 
 q           Cancel the popup menu.
 
