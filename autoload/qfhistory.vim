@@ -30,6 +30,11 @@ function! s:popup_callback(loclist, winid, result) abort
         return
     endif
     silent execute a:result .. (a:loclist ? 'lhistory' : 'chistory')
+
+    let event = (a:loclist ? 'LHistoryCmdPost' : 'CHistoryCmdPost')
+    if exists('#User#' .. event)
+        execute 'doautocmd <nomodeline> User' event
+    endif
 endfunction
 
 function! s:popup_filter(loclist, winid, key) abort

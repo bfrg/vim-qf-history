@@ -20,10 +20,14 @@ Commands ~
 :Chistory                                                          *:Chistory*
             Display the |quickfix| history in a popup window and make the
             selected list the current list. This is similar to |:chistory|.
+            If quickfix list is changed, the autocommand |CHistoryCmdPost| is
+            executed. See examples below.
 
 :Lhistory                                                          *:Lhistory*
             Same as |:Chistory|, but display the |location-list| history of
             the current window. This is similar to |:lhistory|.
+            If location-list is changed, the autocommand |LHistoryCmdPost|
+            is executed.
 
                                                     *qfhistory-popup-mappings*
 Popup window mappings ~
@@ -43,6 +47,32 @@ q           Cancel the popup menu.
 
 <Enter>     Accept current selection, makes the selection the current list.
 
+
+Autocommands ~
+
+CHistoryCmdPost                                              *CHistoryCmdPost*
+            |User| autocommand that is executed after switching the |quickfix|
+            list through the popup menu. Example: >
+                " Print quickfix info of current list in command-line
+                augroup qfhistory
+                  autocmd!
+                  autocmd User CHistoryCmdPost echo
+                      \ printf('Quickfix %d of %d (%d items): %s',
+                      \   getqflist({'nr': 0}).nr,
+                      \   getqflist({'nr': '$'}).nr,
+                      \   getqflist({'size': 0}).size,
+                      \   getqflist({'title': 0}).title
+                      \ )
+                augroup END
+<
+LHistoryCmdPost                                              *LHistoryCmdPost*
+            Same as |CHistoryCmdPost| but when the |location-list| is changed.
+            Example: >
+                augroup qfhistory
+                    autocmd!
+                    autocmd User LHistoryCmdPost lwindow
+                augroup END
+<
 ==============================================================================
 CONFIGURATION                                               *qfhistory-config*
 
