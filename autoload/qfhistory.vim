@@ -61,7 +61,7 @@ function! qfhistory#open(loclist) abort
     let nr = Xgetlist({'nr': '$'}).nr
 
     if !nr
-        echo 'No ' .. (a:loclist ? 'location' : 'quickfix') .. ' lists'
+        echo 'No ' .. (a:loclist ? 'location lists for current window' : 'quickfix lists')
         return
     endif
 
