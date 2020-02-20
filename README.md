@@ -3,6 +3,12 @@
 Plugin to quickly navigate Vim's `quickfix` and `location-list` history using a
 popup menu.
 
+<dl>
+  <p align="center">
+  <img src="https://user-images.githubusercontent.com/6266600/74968593-554a3c00-541b-11ea-8a82-f6d99357a007.png" width="480"/>
+  </p>
+</dl>
+
 
 ## Usage
 
@@ -56,6 +62,8 @@ highlight groups:
 
 ### Examples
 
+#### Mappings
+
 Open `quickfix` and `location-list` history with
 <kbd>Leader</kbd><kbd>c</kbd><kbd>h</kbd> and
 <kbd>Leader</kbd><kbd>l</kbd><kbd>h</kbd>, respectively:
@@ -64,29 +72,31 @@ nnoremap <Leader>ch :<C-u>Chistory<CR>
 nnoremap <Leader>lh :<C-u>Lhistory<CR>
 ```
 
-Don't draw any window border and disable the window title:
+#### Appearance
+
+![img](https://user-images.githubusercontent.com/6266600/74968239-cb01d800-541a-11ea-87f6-cb6ba9829395.png)
+
+**Left:** no window border and no window title:
 ```vim
 let g:qfhistory = {'border': [0,0,0,0], 'title': 0}
 ```
 
-Draw an empty border, but keep window title:
-```vim
-let g:qfhistory = {'borderchars': [' ']}
-```
-
-Draw a border with round corners, no padding inside:
+**Middle:** border with round corners, padding on left and right side:
 ```vim
 let g:qfhistory = {
-    \ 'padding': [0,0,0,0],
-    \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
+    \ 'padding': [0,1,0,1],
+    \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+    \ 'borderhighlight': ['MyBoldPopupBorder']
     \ }
 ```
 
-Draw a border with round corners, no window title, and default padding:
+**Right:** border with round corners, no window title:
 ```vim
 let g:qfhistory = {
     \ 'title': 0,
-    \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
+    \ 'padding': [0,1,0,1],
+    \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+    \ 'borderhighlight': ['MyBoldPopupBorder']
     \ }
 ```
 
@@ -102,7 +112,7 @@ $ git clone https://github.com/bfrg/vim-qf-history
 $ vim -u NONE -c "helptags vim-qf-history/doc" -c quit
 ```
 **Note:** The directory name `git-plugins` is arbitrary, you can pick any other
-name. For more details see `:help packages`.
+name. For more details see <kbd>:help packages</kbd>.
 
 #### Plugin Managers
 
