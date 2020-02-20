@@ -8,8 +8,8 @@ License:    Same terms as Vim itself (see |license|)
 ==============================================================================
 INTRODUCTION                                                       *qfhistory*
 
-Plugin to quickly navigate the |quickfix| and |location-list| stack using a
-popup menu.
+Plugin to quickly navigate Vim's |quickfix| and |location-list| history using
+a popup menu. See |quickfix-error-lists|.
 
 
 ==============================================================================
@@ -38,8 +38,8 @@ G, <End>    Move cursorline to the bottom.
 
 q           Cancel the popup menu.
 
-[0-9]       Select the [0-9]th error list. Press 0 to select the 10th error
-            list.
+[0-9]       Select the [0-9]th error list. 0 always selects the last error
+            list in the stack (most recent one).
 
 <Enter>     Accept current selection, makes the selection the current list.
 

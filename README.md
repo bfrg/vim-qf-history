@@ -1,6 +1,6 @@
 # vim-qf-history
 
-Plugin to quickly navigate the `quickfix` and `location-list` stack using a
+Plugin to quickly navigate Vim's `quickfix` and `location-list` history using a
 popup menu.
 
 
@@ -9,18 +9,19 @@ popup menu.
 #### `:Chistory`
 
 Display the `quickfix` history in a popup window and make the selected list the
-current list, similar to `:chistory`.
+current list, similar to <kbd>:[count]chistory</kbd>.
 
 #### `:Lhistory`
 
-Same as `:Chistory`, but display the `location-list` history of the current
-window, similar to `:lhistory`.
+Same as <kbd>:Chistory</kbd>, but display the `location-list` history of the
+current window. This command is similar to <kbd>:[count]lhistory</kbd>.
 
 #### Popup mappings
 
 Use <kbd>j</kbd>, <kbd>k</kbd>, <kbd>g</kbd> and <kbd>G</kbd> to move the
-cursorline in the menu, <kbd>0</kbd> to <kbd>9</kbd> selects the respective
-entry. Press <kbd>q</kbd> to cancel the popup menu, and <kbd>Enter</kbd> to make
+cursorline in the menu, <kbd>0</kbd> to <kbd>9</kbd> select the respective
+entry. <kbd>0</kbd> always selects the last error list in the stack (most recent
+one). Press <kbd>q</kbd> to cancel the popup menu, and <kbd>Enter</kbd> to make
 the selected list the current list.
 
 
@@ -68,9 +69,9 @@ Don't draw any window border and disable the window title:
 let g:qfhistory = {'border': [0,0,0,0], 'title': 0}
 ```
 
-Draw an empty border with window title:
+Draw an empty border, but keep window title:
 ```vim
-let g:qfhistory = {'border': [], 'borderchars': [' ']}
+let g:qfhistory = {'borderchars': [' ']}
 ```
 
 Draw a border with round corners, no padding inside:
@@ -114,6 +115,6 @@ Plug 'bfrg/vim-qf-history'
 
 ## License
 
-Distributed under the same terms as Vim itself. See `:help license`.
+Distributed under the same terms as Vim itself. See <kbd>:help license</kbd>.
 
 [plug]: https://github.com/junegunn/vim-plug
