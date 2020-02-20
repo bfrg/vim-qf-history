@@ -3,7 +3,7 @@
 " File:         autoload/qfhistory.vim
 " Author:       bfrg <https://github.com/bfrg>
 " Website:      https://github.com/bfrg/vim-qf-history
-" Last Change:  Feb 19, 2020
+" Last Change:  Feb 20, 2020
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
 
@@ -81,7 +81,8 @@ function! qfhistory#open(loclist) abort
             \ 'highlight': 'QfHistory',
             \ 'title': s:get('title') ? (a:loclist ? ' Location-list History' : ' Quickfix History') : '',
             \ 'callback': funcref('s:popup_callback', [a:loclist]),
-            \ 'filter': funcref('s:popup_filter', [a:loclist])
+            \ 'filter': funcref('s:popup_filter', [a:loclist]),
+            \ 'filtermode': 'n'
             \ })
 
     call popup_filter_menu(winid, 'j')
