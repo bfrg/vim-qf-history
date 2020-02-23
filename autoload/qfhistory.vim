@@ -3,9 +3,11 @@
 " File:         autoload/qfhistory.vim
 " Author:       bfrg <https://github.com/bfrg>
 " Website:      https://github.com/bfrg/vim-qf-history
-" Last Change:  Feb 20, 2020
+" Last Change:  Feb 23, 2020
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
+
+scriptencoding utf-8
 
 let s:cpo_save = &cpoptions
 set cpoptions&vim
@@ -92,9 +94,9 @@ function! qfhistory#open(loclist) abort
 
     call popup_filter_menu(winid, 'j')
 
-    call matchadd('QfHistoryHeader', '\%^.*$', 1, 100000, {'window': winid})
-    call matchadd('QfHistoryEmpty', '^>\=\zs\s*\d\+\s\+0.*', 1, 100001, {'window': winid})
-    call matchadd('QfHistoryCurrent', '^>', 2, 100002, {'window': winid})
+    call matchadd('QfHistoryHeader', '\%^.*$', 1, -1, {'window': winid})
+    call matchadd('QfHistoryEmpty', '^>\=\zs\s*\d\+\s\+0.*', 1, -1, {'window': winid})
+    call matchadd('QfHistoryCurrent', '^>', 2, -1, {'window': winid})
 
     return winid
 endfunction
