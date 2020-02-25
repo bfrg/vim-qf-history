@@ -117,7 +117,8 @@ function! qfhistory#open(loclist) abort
 
     for i in range(1, nr)
         if !Xgetlist({'nr': i, 'size': 0}).size
-            call matchadd('QfHistoryEmpty', '\%' .. (i+1) .. 'l', 1, -1, {'window': winid})
+            let pattern = printf('\%%%dl.*\%%%dc', i+1, winbufnr(winid)->getbufline(i+1)[0]->len())
+            call matchadd('QfHistoryEmpty', pattern, 1, -1, {'window': winid})
         endif
     endfor
 
