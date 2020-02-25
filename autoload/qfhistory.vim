@@ -113,7 +113,7 @@ function! qfhistory#open(loclist) abort
     call popup_filter_menu(winid, 'j')
 
     call matchadd('QfHistoryHeader', '\%^.*$', 1, -1, {'window': winid})
-    call matchadd('QfHistoryEmpty', '^>\=\zs\s*\(\d\+\s\+\)\{5}0.*', 1, 100001, {'window': winid})
+    call matchadd('QfHistoryEmpty', '^>\=\zs\s*\(\d\+\s\+\)\{5}0.*', 1, -1, {'window': winid})
     call matchadd('QfHistoryCurrent', '^>', 2, -1, {'window': winid})
 
     return winid
