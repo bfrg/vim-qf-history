@@ -20,7 +20,8 @@ current list, similar to <kbd>:[count]chistory</kbd>.
 #### `:Lhistory`
 
 Same as <kbd>:Chistory</kbd>, but display the `location-list` history of the
-current window. This command is similar to <kbd>:[count]lhistory</kbd>.
+current window. This is similar to Vim's builtin command
+<kbd>:[count]lhistory</kbd>.
 
 #### Popup mappings
 
@@ -74,14 +75,14 @@ nnoremap <Leader>lh :<C-u>Lhistory<CR>
 
 #### Appearance
 
-![img](https://user-images.githubusercontent.com/6266600/74968239-cb01d800-541a-11ea-87f6-cb6ba9829395.png)
+![img][image-examples]
 
 **Left:** no window border and no window title:
 ```vim
 let g:qfhistory = {'border': [0,0,0,0], 'title': 0}
 ```
 
-**Middle:** border with round corners, padding on left and right side:
+**Center:** border with round corners, padding on left and right side:
 ```vim
 let g:qfhistory = {
     \ 'padding': [0,1,0,1],
@@ -90,7 +91,7 @@ let g:qfhistory = {
     \ }
 ```
 
-**Right:** border with round corners, no window title:
+**Right:** same as center but without a window title
 ```vim
 let g:qfhistory = {
     \ 'title': 0,
@@ -127,4 +128,5 @@ Plug 'bfrg/vim-qf-history'
 
 Distributed under the same terms as Vim itself. See <kbd>:help license</kbd>.
 
+[image-examples]: https://user-images.githubusercontent.com/6266600/74968239-cb01d800-541a-11ea-87f6-cb6ba9829395.png
 [plug]: https://github.com/junegunn/vim-plug
