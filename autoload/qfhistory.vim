@@ -85,10 +85,10 @@ function! qfhistory#open(loclist) abort
             \ printf('%s %2d %4s %4s %4s %5s %6d   %s',
             \   (i == Xgetlist({'nr': 0}).nr ? '>' : ' '),
             \   i,
-            \   qferrors[i-1]['E'],
-            \   qferrors[i-1]['W'],
-            \   qferrors[i-1]['I'],
-            \   qferrors[i-1]['?'],
+            \   !qferrors[i-1]['E'] ? '-' : qferrors[i-1]['E'],
+            \   !qferrors[i-1]['W'] ? '-' : qferrors[i-1]['W'],
+            \   !qferrors[i-1]['I'] ? '-' : qferrors[i-1]['I'],
+            \   !qferrors[i-1]['?'] ? '-' : qferrors[i-1]['?'],
             \   Xgetlist({'nr': i, 'size': 0}).size,
             \   Xgetlist({'nr': i, 'title': 0}).title
             \ )})
@@ -113,8 +113,13 @@ function! qfhistory#open(loclist) abort
     call popup_filter_menu(winid, 'j')
 
     call matchadd('QfHistoryHeader', '\%^.*$', 1, -1, {'window': winid})
-    call matchadd('QfHistoryEmpty', '^>\=\zs\s*\(\d\+\s\+\)\{5}0.*', 1, -1, {'window': winid})
     call matchadd('QfHistoryCurrent', '^>', 2, -1, {'window': winid})
+
+    for i in range(1, nr)
+        if !Xgetlist({'nr': i, 'size': 0}).size
+            call matchadd('QfHistoryEmpty', '\%' .. (i+1) .. 'l', 1, -1, {'window': winid})
+        endif
+    endfor
 
     return winid
 endfunction
