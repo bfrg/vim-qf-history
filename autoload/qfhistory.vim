@@ -78,20 +78,32 @@ function! qfhistory#open(loclist) abort
             \   }
             \ })
 
-    " Header of table
-    let header = '  QF    E    W    I     ?   Size   Title'
+    " Maximum value of each error type in all quickfix lists
+    let max = {
+            \ 'E': copy(qferrors)->map("v:val['E']")->max(),
+            \ 'W': copy(qferrors)->map("v:val['W']")->max(),
+            \ 'I': copy(qferrors)->map("v:val['I']")->max(),
+            \ '?': copy(qferrors)->map("v:val['?']")->max()
+            \ }
 
-    let lists = range(1, nr)->map({_, i ->
-            \ printf('%s %2d %4s %4s %4s %5s %6d   %s',
-            \   (i == Xgetlist({'nr': 0}).nr ? '>' : ' '),
-            \   i,
-            \   !qferrors[i-1]['E'] ? '-' : qferrors[i-1]['E'],
-            \   !qferrors[i-1]['W'] ? '-' : qferrors[i-1]['W'],
-            \   !qferrors[i-1]['I'] ? '-' : qferrors[i-1]['I'],
-            \   !qferrors[i-1]['?'] ? '-' : qferrors[i-1]['?'],
-            \   Xgetlist({'nr': i, 'size': 0}).size,
-            \   Xgetlist({'nr': i, 'title': 0}).title
-            \ )})
+    " Columns E/W/I/? are shown only when E/W/I are non-zero in at least one list
+    let header = '  QF'
+            \ .. (!max['E'] ? '' : '    E')
+            \ .. (!max['W'] ? '' : '    W')
+            \ .. (!max['I'] ? '' : '    I')
+            \ .. (!max['E'] && !max['W'] && !max['I'] ? '' : '     ?')
+            \ .. '   Size   Title'
+
+    let lists = range(1, nr)->map({_,i ->
+            \ (i == Xgetlist({'nr': 0}).nr ? '>' : ' ')
+            \ .. printf(' %2d', i)
+            \ .. (!max['E'] ? '' : printf(' %4d', qferrors[i-1]['E']))
+            \ .. (!max['W'] ? '' : printf(' %4d', qferrors[i-1]['W']))
+            \ .. (!max['I'] ? '' : printf(' %4d', qferrors[i-1]['I']))
+            \ .. (!max['E'] && !max['W'] && !max['I'] ? '' : printf(' %5d', qferrors[i-1]['?']))
+            \ .. printf(' %6d', Xgetlist({'nr': i, 'size': 0}).size)
+            \ .. printf('   %s', Xgetlist({'nr': i, 'title': 0}).title)
+            \ })
 
     let qflist = extend([header], lists)
 

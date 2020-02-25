@@ -5,7 +5,7 @@ popup menu.
 
 <dl>
   <p align="center">
-  <img src="https://user-images.githubusercontent.com/6266600/75267665-d415ef00-57f6-11ea-8728-d28e0c37f743.png" width="480"/>
+  <img src="https://user-images.githubusercontent.com/6266600/75272609-869d8000-57fe-11ea-92d8-a4094b6edf8d.png" width="480"/>
   </p>
 </dl>
 
