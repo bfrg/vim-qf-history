@@ -5,7 +5,7 @@ popup menu.
 
 <dl>
   <p align="center">
-  <img src="https://user-images.githubusercontent.com/6266600/74968593-554a3c00-541b-11ea-8a82-f6d99357a007.png" width="480"/>
+  <img src="https://user-images.githubusercontent.com/6266600/75267665-d415ef00-57f6-11ea-8728-d28e0c37f743.png" width="480"/>
   </p>
 </dl>
 
@@ -91,7 +91,7 @@ let g:qfhistory = {
     \ }
 ```
 
-**Right:** same as center but without a window title
+**Right:** same as middle image but without a window title
 ```vim
 let g:qfhistory = {
     \ 'title': 0,
