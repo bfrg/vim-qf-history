@@ -3,7 +3,7 @@
 " File:         autoload/qfhistory.vim
 " Author:       bfrg <https://github.com/bfrg>
 " Website:      https://github.com/bfrg/vim-qf-history
-" Last Change:  Feb 23, 2020
+" Last Change:  Feb 25, 2020
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
 
@@ -67,15 +67,33 @@ function! qfhistory#open(loclist) abort
         return
     endif
 
-    let qflist = ['  QF   Size   Title']
-    for i in range(1, nr)
-        call add(qflist, printf('%s %2d %6d   %s',
-                \ (i == Xgetlist({'nr': 0}).nr ? '>' : ' '),
-                \ i,
-                \ Xgetlist({'nr': i, 'size': 0}).size,
-                \ Xgetlist({'nr': i, 'title': 0}).title
-                \ ))
-    endfor
+    " Number of each error type (E, W, I) in each quickfix list
+    let qferrors = range(1, nr)
+            \ ->map({_,i -> Xgetlist({'nr': i, 'items': 0}).items->map('v:val.type')})
+            \ ->map({_,i -> {
+            \   'E': count(i, 'E', 1),
+            \   'W': count(i, 'W', 1),
+            \   'I': count(i, 'I', 1),
+            \   '?': filter(copy(i), 'v:val !~? "^[EWI]$"')->len()
+            \   }
+            \ })
+
+    " Header of table
+    let header = '  QF    E    W    I     ?   Size   Title'
+
+    let lists = range(1, nr)->map({_, i ->
+            \ printf('%s %2d %4s %4s %4s %5s %6d   %s',
+            \   (i == Xgetlist({'nr': 0}).nr ? '>' : ' '),
+            \   i,
+            \   qferrors[i-1]['E'],
+            \   qferrors[i-1]['W'],
+            \   qferrors[i-1]['I'],
+            \   qferrors[i-1]['?'],
+            \   Xgetlist({'nr': i, 'size': 0}).size,
+            \   Xgetlist({'nr': i, 'title': 0}).title
+            \ )})
+
+    let qflist = extend([header], lists)
 
     let winid = popup_create(qflist, {
             \ 'padding': s:get('padding'),
@@ -95,7 +113,7 @@ function! qfhistory#open(loclist) abort
     call popup_filter_menu(winid, 'j')
 
     call matchadd('QfHistoryHeader', '\%^.*$', 1, -1, {'window': winid})
-    call matchadd('QfHistoryEmpty', '^>\=\zs\s*\d\+\s\+0.*', 1, -1, {'window': winid})
+    call matchadd('QfHistoryEmpty', '^>\=\zs\s*\(\d\+\s\+\)\{5}0.*', 1, 100001, {'window': winid})
     call matchadd('QfHistoryCurrent', '^>', 2, -1, {'window': winid})
 
     return winid
