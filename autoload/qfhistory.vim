@@ -3,7 +3,7 @@
 " File:         autoload/qfhistory.vim
 " Author:       bfrg <https://github.com/bfrg>
 " Website:      https://github.com/bfrg/vim-qf-history
-" Last Change:  Feb 25, 2020
+" Last Change:  Feb 26, 2020
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
 
@@ -49,7 +49,7 @@ function! s:popup_filter(loclist, winid, key) abort
     elseif a:key ==# 'G' || a:key ==# "\<end>"
         call win_execute(a:winid, '$')
     elseif a:key =~# '\d'
-        call win_execute(a:winid, a:key == 0 ? '$' : string(a:key + 1))
+        call popup_close(a:winid, a:key == 0 ? line('$', a:winid) - 1 : a:key)
     elseif a:key ==# 'q'
         call popup_close(a:winid, -1)
     elseif a:key ==# "\<cr>"

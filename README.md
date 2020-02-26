@@ -31,6 +31,9 @@ entry. <kbd>0</kbd> always selects the last error list in the stack (most recent
 one). Press <kbd>q</kbd> to cancel the popup menu, and <kbd>Enter</kbd> to make
 the selected list the current list.
 
+**Note:** Pressing <kbd>0</kbd> to <kbd>9</kbd> will automatically close the
+popup window.
+
 
 ## Configuration
 

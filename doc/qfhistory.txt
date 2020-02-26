@@ -42,8 +42,9 @@ G, <End>    Move cursorline to the bottom.
 
 q           Cancel the popup menu.
 
-[0-9]       Select the [0-9]th error list. 0 always selects the last error
-            list in the stack (most recent one).
+[0-9]       Make the [0-9]th error list the current list. 0 always selects the
+            last error list in the stack (most recent one). Note: Pressing
+            [0-9] will automatically close the popup window.
 
 <Enter>     Accept current selection, makes the selection the current list.
 
