@@ -26,13 +26,40 @@ current window. This is similar to Vim's builtin command
 #### Popup mappings
 
 Use <kbd>j</kbd>, <kbd>k</kbd>, <kbd>g</kbd> and <kbd>G</kbd> to move the
-cursorline in the menu, <kbd>0</kbd> to <kbd>9</kbd> select the respective
-entry. <kbd>0</kbd> always selects the last error list in the stack (most recent
-one). Press <kbd>q</kbd> to cancel the popup menu, and <kbd>Enter</kbd> to make
-the selected list the current list.
+cursorline in the menu, or <kbd>0</kbd> to <kbd>9</kbd> to select the respective
+entry directly. <kbd>0</kbd> will select the last error list in the stack (most
+recent one) if there are less than ten lists. Press <kbd>q</kbd> to cancel the
+popup menu, and <kbd>Enter</kbd> to make the selected list the current list.
 
-**Note:** Pressing <kbd>0</kbd> to <kbd>9</kbd> will automatically close the
-popup window.
+**Note:** Pressing <kbd>0</kbd> to <kbd>9</kbd> will select and close the popup
+window.
+
+#### Autocommands
+
+After switching the quickfix list through the popup menu, the `User` event
+`CHistoryCmdPost` is executed, and similarly `LHistoryCmdPost` for the
+location-list.
+
+Examples:
+```vim
+" Print quickfix info of current list in command-line after switching lists
+augroup qfhistory
+    autocmd!
+    autocmd User CHistoryCmdPost echo
+        \ printf('Quickfix %d of %d (%d items): %s',
+        \   getqflist({'nr': 0}).nr,
+        \   getqflist({'nr': '$'}).nr,
+        \   getqflist({'size': 0}).size,
+        \   getqflist({'title': 0}).title
+        \ )
+augroup END
+
+" Automatically open location-list window
+augroup qfhistory
+    autocmd!
+    autocmd User LHistoryCmdPost lwindow
+augroup END
+```
 
 
 ## Configuration
@@ -42,15 +69,16 @@ popup window.
 The appearance of the popup window can be configured through the dictionary
 variable `g:qfhistory`. The following keys are supported:
 
-| Key               | Description                                                         | Default                                     |
-| ----------------- | ------------------------------------------------------------------- | ------------------------------------------- |
-| `title`           | Whether to show a popup window title (`0` or `1`).                  | `1`                                         |
-| `padding`         | List with numbers defining the padding inside the popup window.     | `[1,1,1,1]`                                 |
-| `border`          | List with numbers (`0` or `1`) specifying whether to draw a border. | `[1,1,1,1]`                                 |
-| `borderchars`     | List with characters used for drawing the window border.            | `['─', '│', '─', '│', '┌', '┐', '┘', '└']`  |
-| `borderhighlight` | List with highlight group names used for drawing the border.        | `[QfHistory]`                               |
+| Key               | Description                                                         | Default                                    |
+| ----------------- | ------------------------------------------------------------------- | ------------------------------------------ |
+| `title`           | Whether to show a popup window title (`0` or `1`).                  | `1`                                        |
+| `padding`         | List with numbers defining the padding inside the popup window.     | `[1,1,1,1]`                                |
+| `border`          | List with numbers (`0` or `1`) specifying whether to draw a border. | `[1,1,1,1]`                                |
+| `borderchars`     | List with characters used for drawing the window border.            | `['─', '│', '─', '│', '┌', '┐', '┘', '└']` |
+| `borderhighlight` | List with highlight group names used for drawing the border.        | `['QfHistory']`                            |
 
-**Note:** when only one `borderchars` is specified, it is used for all sides.
+**Note:** when only one `borderchars` or `borderhighlight` item is specified, it
+is used on all sides.
 
 ### Highlighting
 
