@@ -10,6 +10,11 @@ popup menu.
 </dl>
 
 
+## Requirements
+
+Vim `>= 8.1.1969`
+
+
 ## Usage
 
 #### `:Chistory`
