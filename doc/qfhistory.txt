@@ -17,15 +17,15 @@ Commands ~
 
 :Chistory                                                          *:Chistory*
             Display the |quickfix| history in a popup window and make the
-            selected list the current list. This is similar to |:chistory|.
-            If quickfix list is changed, the autocommand |CHistoryCmdPost| is
-            executed. See examples below.
+            selected list the current list, similar to |:chistory|.
+            If the quickfix list is switched, the |User| autocommand
+            |CHistoryCmdPost| is executed. See also examples below.
 
 :Lhistory                                                          *:Lhistory*
             Same as |:Chistory|, but display the |location-list| history of
             the current window. This is similar to |:lhistory|.
-            If location-list is changed, the autocommand |LHistoryCmdPost|
-            is executed.
+            If the location-list is switched, the user autocommand
+            |LHistoryCmdPost| is executed.
 
                                                     *qfhistory-popup-mappings*
 Popup window mappings ~
@@ -40,7 +40,6 @@ q           Cancel the popup menu.
             [0-9] will also close the popup window.
 <Enter>     Accept current selection. Makes the selected list the current
             list.
-
 
 Autocommands ~
 
@@ -125,10 +124,10 @@ Examples ~
         \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
         \ }
 <
-                                                         *qfhistory-highlight*
-Highlight Groups ~
+==============================================================================
+HIGHLIGHTING                                             *qfhistory-highlight*
 
-Currently only one highlight group is used by the plugin:
+The following highlighting groups are used by the plugin:
                                                                 *hl-QfHistory*
 QfHistory           Normal text in the popup window. This is the equivalent of
                     the |hl-Normal| highlight group in regular windows.
