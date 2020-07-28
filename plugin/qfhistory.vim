@@ -7,10 +7,10 @@
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
 
-if get(g:, 'loaded_qfhistory') || !has('patch-8.1.1969')
+if get(g:, 'loaded_qfhistory') || !has('patch-8.2.1307')
     finish
 endif
 let g:loaded_qfhistory = 1
 
-command Chistory call qfhistory#open(0)
-command Lhistory call qfhistory#open(1)
+command Chistory call qfhistory#open(v:false)
+command Lhistory call qfhistory#open(v:true)
