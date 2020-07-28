@@ -3,7 +3,7 @@
 " File:         autoload/qfhistory.vim
 " Author:       bfrg <https://github.com/bfrg>
 " Website:      https://github.com/bfrg/vim-qf-history
-" Last Change:  Feb 26, 2020
+" Last Change:  Jul 28, 2020
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
 
@@ -19,7 +19,7 @@ hi def link QfHistoryEmpty      Comment
 
 let s:defaults = {
         \ 'title': 1,
-        \ 'padding': [1,1,1,1],
+        \ 'padding': [],
         \ 'border': [],
         \ 'borderchars': ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
         \ 'borderhighlight': []
@@ -27,7 +27,7 @@ let s:defaults = {
 
 let s:get = {k -> get(get(g:, 'qfhistory', s:defaults), k, get(s:defaults, k))}
 
-function! s:popup_callback(loclist, winid, result) abort
+function s:popup_callback(loclist, winid, result) abort
     if a:result < 1
         return
     endif
@@ -39,7 +39,7 @@ function! s:popup_callback(loclist, winid, result) abort
     endif
 endfunction
 
-function! s:popup_filter(loclist, winid, key) abort
+function s:popup_filter(loclist, winid, key) abort
     if a:key ==# 'j' || a:key ==# "\<down>"
         call win_execute(a:winid, line('.', a:winid) == line('$', a:winid) ? '2' : 'normal! +')
     elseif a:key ==# 'k' || a:key ==# "\<up>"
@@ -58,7 +58,7 @@ function! s:popup_filter(loclist, winid, key) abort
     return v:true
 endfunction
 
-function! qfhistory#open(loclist) abort
+function qfhistory#open(loclist) abort
     let Xgetlist = a:loclist ? function('getloclist', [0]) : function('getqflist')
     let nr = Xgetlist({'nr': '$'}).nr
 
@@ -67,14 +67,15 @@ function! qfhistory#open(loclist) abort
         return
     endif
 
-    " Number of each error type (E, W, I) in each quickfix list
+    " Number of each error type (E, W, I, N) in each quickfix list
     let qferrors = range(1, nr)
             \ ->map({_,i -> Xgetlist({'nr': i, 'items': 0}).items->map('v:val.type')})
             \ ->map({_,i -> {
             \   'E': count(i, 'E', 1),
             \   'W': count(i, 'W', 1),
             \   'I': count(i, 'I', 1),
-            \   '?': filter(copy(i), 'v:val !~? "^[EWI]$"')->len()
+            \   'N': count(i, 'N', 1),
+            \   '?': filter(copy(i), 'v:val !~? "^[EWIN]$"')->len()
             \   }
             \ })
 
@@ -83,15 +84,18 @@ function! qfhistory#open(loclist) abort
             \ 'E': copy(qferrors)->map("v:val['E']")->max(),
             \ 'W': copy(qferrors)->map("v:val['W']")->max(),
             \ 'I': copy(qferrors)->map("v:val['I']")->max(),
+            \ 'N': copy(qferrors)->map("v:val['N']")->max(),
             \ '?': copy(qferrors)->map("v:val['?']")->max()
             \ }
 
-    " Columns E/W/I/? are shown only when E/W/I are non-zero in at least one list
+    " Columns E/W/I/N/? are shown only when E/W/I/N are non-zero in at least one
+    " list
     let header = '  QF'
             \ .. (!max['E'] ? '' : '    E')
             \ .. (!max['W'] ? '' : '    W')
             \ .. (!max['I'] ? '' : '    I')
-            \ .. (!max['E'] && !max['W'] && !max['I'] ? '' : '     ?')
+            \ .. (!max['N'] ? '' : '    N')
+            \ .. (!max['E'] && !max['W'] && !max['I'] && !max['N'] ? '' : '     ?')
             \ .. '   Size   Title'
 
     let lists = range(1, nr)->map({_,i ->
@@ -100,7 +104,8 @@ function! qfhistory#open(loclist) abort
             \ .. (!max['E'] ? '' : printf(' %4s', !qferrors[i-1]['E'] ? '-' : qferrors[i-1]['E']))
             \ .. (!max['W'] ? '' : printf(' %4s', !qferrors[i-1]['W'] ? '-' : qferrors[i-1]['W']))
             \ .. (!max['I'] ? '' : printf(' %4s', !qferrors[i-1]['I'] ? '-' : qferrors[i-1]['I']))
-            \ .. (!max['E'] && !max['W'] && !max['I'] ? '' : printf(' %5s', !qferrors[i-1]['?'] ? '-' : qferrors[i-1]['?']))
+            \ .. (!max['N'] ? '' : printf(' %4s', !qferrors[i-1]['N'] ? '-' : qferrors[i-1]['N']))
+            \ .. (!max['E'] && !max['W'] && !max['I'] && !max['N'] ? '' : printf(' %5s', !qferrors[i-1]['?'] ? '-' : qferrors[i-1]['?']))
             \ .. printf(' %6d', Xgetlist({'nr': i, 'size': 0}).size)
             \ .. printf('   %s', Xgetlist({'nr': i, 'title': 0}).title)
             \ })
