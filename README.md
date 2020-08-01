@@ -9,6 +9,21 @@ popup menu.
   </p>
 </dl>
 
+**Background**
+
+Vim remembers the ten last used quickfix lists, and the ten last used
+location-lists for each window. The entire quickfix and location-list stack can
+be displayed with <kbd>:chistory</kbd> and <kbd>:lhistory</kbd>, respectively.
+Older quickfix lists are accessed through <kbd>:colder</kbd> and
+<kbd>:cnewer</kbd>, or directly with <kbd>:[count]chistory</kbd> (and similar
+for location-lists). See <kbd>:help quickfix-error-lists</kbd> for more details.
+
+This plugin will display the quickfix and location-list stack in a popup menu
+allowing the user to easily switch to an earlier error list. If one of the lists
+contains different error types, the total number of each error type (E, W, I, N)
+is shown along with the total number of entries. Unknown error types are
+displayed in column "?", and empty lists are greyed out.
+
 
 ## Requirements
 
@@ -77,8 +92,8 @@ variable `g:qfhistory`. The following keys are supported:
 | Key               | Description                                                         | Default                                    |
 | ----------------- | ------------------------------------------------------------------- | ------------------------------------------ |
 | `title`           | Whether to show a popup window title (`0` or `1`).                  | `1`                                        |
-| `padding`         | List with numbers defining the padding inside the popup window.     | `[1,1,1,1]`                                |
-| `border`          | List with numbers (`0` or `1`) specifying whether to draw a border. | `[1,1,1,1]`                                |
+| `padding`         | List with numbers defining the padding inside the popup window.     | `[1, 1, 1, 1]`                             |
+| `border`          | List with numbers (`0` or `1`) specifying whether to draw a border. | `[1, 1, 1, 1]`                             |
 | `borderchars`     | List with characters used for drawing the window border.            | `['─', '│', '─', '│', '┌', '┐', '┘', '└']` |
 | `borderhighlight` | List with highlight group names used for drawing the border.        | `['QfHistory']`                            |
 
@@ -102,11 +117,18 @@ highlight groups:
 #### Mappings
 
 Open `quickfix` and `location-list` history with
-<kbd>Leader</kbd><kbd>c</kbd><kbd>h</kbd> and
-<kbd>Leader</kbd><kbd>l</kbd><kbd>h</kbd>, respectively:
+<kbd>Leader</kbd>+<kbd>c</kbd>+<kbd>h</kbd> and
+<kbd>Leader</kbd>+<kbd>l</kbd>+<kbd>h</kbd>, respectively:
 ```vim
 nnoremap <Leader>ch :<C-u>Chistory<CR>
 nnoremap <Leader>lh :<C-u>Lhistory<CR>
+```
+
+Or alternatively, if you're not using the default `Select-mode` mappings
+(mnemonic: go history):
+```vim
+nnoremap gh :<C-u>Chistory<CR>
+nnoremap gH :<C-u>Lhistory<CR>
 ```
 
 #### Appearance
@@ -115,13 +137,13 @@ nnoremap <Leader>lh :<C-u>Lhistory<CR>
 
 **Left:** no window border and no window title:
 ```vim
-let g:qfhistory = {'border': [0,0,0,0], 'title': 0}
+let g:qfhistory = {'border': [0, 0, 0, 0], 'title': 0}
 ```
 
 **Center:** border with round corners, padding on left and right side:
 ```vim
 let g:qfhistory = {
-    \ 'padding': [0,1,0,1],
+    \ 'padding': [0, 1, 0, 1],
     \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
     \ 'borderhighlight': ['MyBoldPopupBorder']
     \ }
@@ -131,7 +153,7 @@ let g:qfhistory = {
 ```vim
 let g:qfhistory = {
     \ 'title': 0,
-    \ 'padding': [0,1,0,1],
+    \ 'padding': [0, 1, 0, 1],
     \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
     \ 'borderhighlight': ['MyBoldPopupBorder']
     \ }
@@ -160,9 +182,17 @@ Plug 'bfrg/vim-qf-history'
 ```
 
 
+## Credits
+
+This plugin was inspired by the Vimways article [Colder quickfix lists][vimways]
+written by [Nick Jensen][nickspoons].
+
+
 ## License
 
 Distributed under the same terms as Vim itself. See <kbd>:help license</kbd>.
 
+[vimways]: https://vimways.org/2018/colder-quickfix-lists
+[nickspoons]: https://github.com/nickspoons
 [image-examples]: https://user-images.githubusercontent.com/6266600/74968239-cb01d800-541a-11ea-87f6-cb6ba9829395.png
 [plug]: https://github.com/junegunn/vim-plug
