@@ -23,6 +23,25 @@ const s:defaults: dict<any> = {
     'borderhighlight': []
 }
 
+const s:opts: list<string> =<< trim END
+    pos
+    line
+    col
+    maxheight
+    minheight
+    maxwidth
+    minwidth
+    wrap
+    drag
+    resize
+    close
+    padding
+    border
+    borderchars
+    scrollbar
+    zindex
+END
+
 def s:get(key: string): any
     return get(g:, 'qfhistory', s:defaults)->get(key, s:defaults[key])
 enddef
@@ -60,7 +79,7 @@ def s:popup_filter(winid: number, key: string): bool
     return true
 enddef
 
-def qfhistory#open(loclist: bool): number
+def qfhistory#open(loclist: bool, opts: dict<any> = {}): number
     const Xgetlist = loclist ? function('getloclist', [0]) : function('getqflist')
     const nr: number = Xgetlist({'nr': '$'}).nr
 
@@ -117,7 +136,7 @@ def qfhistory#open(loclist: bool): number
 
     # Columns E/W/I/N/? are displayed only if at least one list contains
     # non-zero E/W/I/N types
-    let header: string = 'QF'
+    const header: string = 'QF'
         .. (!max['E'] ? '' : '    E')
         .. (!max['W'] ? '' : '    W')
         .. (!max['I'] ? '' : '    I')
@@ -125,7 +144,11 @@ def qfhistory#open(loclist: bool): number
         .. (!max['E'] && !max['W'] && !max['I'] && !max['N'] ? '' : '     ?')
         .. '   Size   Title'
 
-    const winid: number = extend([header], lists)->popup_create({
+    const useropts: dict<any> = get(opts, 'popup', {})
+        ->copy()
+        ->filter({k, _ -> index(s:opts, k) > -1})
+
+    const popopts: dict<any> = extend({
         'padding': s:get('padding'),
         'border': s:get('border'),
         'borderchars': s:get('borderchars'),
@@ -138,7 +161,9 @@ def qfhistory#open(loclist: bool): number
         'callback': funcref('s:popup_callback', [loclist]),
         'filter': funcref('s:popup_filter'),
         'filtermode': 'n'
-    })
+    }, useropts)
+
+    const winid: number = extend([header], lists)->popup_create(popopts)
 
     popup_filter_menu(winid, 'j')
     matchadd('QfHistoryHeader', '\%^.*$', 1, -1, {'window': winid})
