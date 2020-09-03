@@ -3,7 +3,7 @@
 " File:         autoload/qfhistory.vim
 " Author:       bfrg <https://github.com/bfrg>
 " Website:      https://github.com/bfrg/vim-qf-history
-" Last Change:  Jul 28, 2020
+" Last Change:  Sep 4, 2020
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
 
@@ -75,7 +75,7 @@ function qfhistory#open(loclist) abort
             \   'W': count(i, 'W', 1),
             \   'I': count(i, 'I', 1),
             \   'N': count(i, 'N', 1),
-            \   '?': filter(copy(i), 'v:val !~? "^[EWIN]$"')->len()
+            \   '?': copy(i)->filter('v:val !~? "^[EWIN]$"')->len()
             \   }
             \ })
 
@@ -90,7 +90,7 @@ function qfhistory#open(loclist) abort
 
     " Columns E/W/I/N/? are shown only when E/W/I/N are non-zero in at least one
     " list
-    let header = '  QF'
+    let header = 'QF'
             \ .. (!max['E'] ? '' : '    E')
             \ .. (!max['W'] ? '' : '    W')
             \ .. (!max['I'] ? '' : '    I')
@@ -99,8 +99,7 @@ function qfhistory#open(loclist) abort
             \ .. '   Size   Title'
 
     let lists = range(1, nr)->map({_,i ->
-            \ (i == Xgetlist({'nr': 0}).nr ? '>' : ' ')
-            \ .. printf(' %2d', i)
+            \ printf('%2d', i)
             \ .. (!max['E'] ? '' : printf(' %4s', !qferrors[i-1]['E'] ? '-' : qferrors[i-1]['E']))
             \ .. (!max['W'] ? '' : printf(' %4s', !qferrors[i-1]['W'] ? '-' : qferrors[i-1]['W']))
             \ .. (!max['I'] ? '' : printf(' %4s', !qferrors[i-1]['I'] ? '-' : qferrors[i-1]['I']))
@@ -130,14 +129,19 @@ function qfhistory#open(loclist) abort
     call popup_filter_menu(winid, 'j')
 
     call matchadd('QfHistoryHeader', '\%^.*$', 1, -1, {'window': winid})
-    call matchadd('QfHistoryCurrent', '^>', 2, -1, {'window': winid})
-
     for i in range(1, nr)
         if !Xgetlist({'nr': i, 'size': 0}).size
             let pattern = printf('\%%%dl.*\%%%dc', i+1, winbufnr(winid)->getbufline(i+1)[0]->len())
             call matchadd('QfHistoryEmpty', pattern, 1, -1, {'window': winid})
         endif
     endfor
+
+    call setwinvar(winid, '&signcolumn', 'yes')
+    call sign_define('QfCurrent', {'text': '>', 'texthl': 'QfHistoryCurrent'})
+    call sign_place(0, 'PopUpQfHistory', 'QfCurrent', winbufnr(winid), {
+            \ 'lnum': Xgetlist({'nr': 0}).nr + 1,
+            \ 'priority': 10
+            \ })
 
     return winid
 endfunction
