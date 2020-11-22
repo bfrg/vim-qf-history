@@ -3,7 +3,7 @@
 " File:         autoload/qfhistory.vim
 " Author:       bfrg <https://github.com/bfrg>
 " Website:      https://github.com/bfrg/vim-qf-history
-" Last Change:  Nov 22, 2020
+" Last Change:  Nov 23, 2020
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
 
@@ -33,9 +33,9 @@ function s:popup_callback(loclist, winid, result) abort
     endif
     silent execute a:result .. (a:loclist ? 'lhistory' : 'chistory')
 
-    const event = (a:loclist ? 'LHistoryCmdPost' : 'CHistoryCmdPost')
-    if exists('#User#' .. event)
-        execute 'doautocmd <nomodeline> User' event
+    const event = a:loclist ? 'lhistory' : 'chistory'
+    if exists('#QuickFixCmdPost#' .. event)
+        execute 'doautocmd <nomodeline> QuickFixCmdPost' event
     endif
 endfunction
 
@@ -71,10 +71,10 @@ function qfhistory#open(loclist) abort
     const qferrors = range(1, nr)
             \ ->map({_,i -> Xgetlist({'nr': i, 'items': 0}).items->map('v:val.type')})
             \ ->map({_,i -> {
-            \   'E': count(i, 'E', 1),
-            \   'W': count(i, 'W', 1),
-            \   'I': count(i, 'I', 1),
-            \   'N': count(i, 'N', 1),
+            \   'E': count(i, 'E', v:true),
+            \   'W': count(i, 'W', v:true),
+            \   'I': count(i, 'I', v:true),
+            \   'N': count(i, 'N', v:true),
             \   '?': copy(i)->filter('v:val !~? "^[EWIN]$"')->len()
             \   }
             \ })

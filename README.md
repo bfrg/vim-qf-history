@@ -1,7 +1,7 @@
 # vim-qf-history
 
-Plugin to quickly navigate Vim's `quickfix` and `location-list` history using a
-popup menu.
+Quickly navigate Vim's `quickfix` and `location-list` history using a popup
+menu.
 
 <dl>
   <p align="center">
@@ -13,10 +13,10 @@ popup menu.
 
 Vim remembers the ten last used quickfix lists, and the ten last used
 location-lists for each window. The entire quickfix and location-list stack can
-be displayed with <kbd>:chistory</kbd> and <kbd>:lhistory</kbd>, respectively.
-Older quickfix lists are accessed through <kbd>:colder</kbd> and
-<kbd>:cnewer</kbd>, or directly with <kbd>:[count]chistory</kbd> (and similar
-for location-lists). See <kbd>:help quickfix-error-lists</kbd> for more details.
+be displayed with `:chistory` and `:lhistory`, respectively. Older quickfix
+lists are accessed through `:colder` and `:cnewer`, or directly with
+`:[count]chistory` (and similar for location-lists). See `:help
+quickfix-error-lists` for more details.
 
 This plugin will display the quickfix and location-list stack in a popup menu
 allowing the user to easily switch to an earlier error list. If one of the lists
@@ -25,25 +25,20 @@ is shown along with the total number of entries. Unknown error types are
 displayed in column "?", and empty lists are greyed out.
 
 
-## Requirements
-
-Vim `>= 8.1.1969`
-
-
 ## Usage
 
-#### `:Chistory`
+### Commands
 
-Display the `quickfix` history in a popup window and make the selected list the
-current list, similar to <kbd>:[count]chistory</kbd>.
+- **`:Chistory`** - Display the quickfix history in a popup window and make the
+  selected list the current list, similar to `:[count]chistory`.
+- **`:Lhistory`** - Same as above, but display the location-list history of the
+  current window, similar to `:[count]lhistory`.
 
-#### `:Lhistory`
+When switching the quickfix or location list through the popup menu, the plugin
+will execute the `QuickFixCmdPost` event with the pattern `chistory` and
+`lhistory`, respectively.
 
-Same as <kbd>:Chistory</kbd>, but display the `location-list` history of the
-current window. This is similar to Vim's builtin command
-<kbd>:[count]lhistory</kbd>.
-
-#### Popup mappings
+### Popup mappings
 
 Use <kbd>j</kbd>, <kbd>k</kbd>, <kbd>g</kbd> and <kbd>G</kbd> to move the
 cursorline in the menu, or <kbd>0</kbd> to <kbd>9</kbd> to select the respective
@@ -51,35 +46,53 @@ entry directly. <kbd>0</kbd> will select the last error list in the stack (most
 recent one) if there are less than ten lists. Press <kbd>q</kbd> to cancel the
 popup menu, and <kbd>Enter</kbd> to make the selected list the current list.
 
-**Note:** Pressing <kbd>0</kbd> to <kbd>9</kbd> will select and close the popup
-window.
+**Note:** Pressing <kbd>0</kbd> to <kbd>9</kbd> will select and automatically
+close the popup window.
 
-#### Autocommands
+### Examples
 
-After switching the quickfix list through the popup menu, the `User` event
-`CHistoryCmdPost` is executed, and similarly `LHistoryCmdPost` for the
-location-list.
+1. Open quickfix and location-list history with
+   <kbd>Leader</kbd>+<kbd>c</kbd>+<kbd>h</kbd> and
+   <kbd>Leader</kbd>+<kbd>l</kbd>+<kbd>h</kbd>, respectively:
+   ```vim
+   nnoremap <Leader>ch <Cmd>Chistory<Cr>
+   nnoremap <Leader>lh <Cmd>Lhistory<Cr>
+   ```
 
-Examples:
-```vim
-" Print quickfix info of current list in command-line after switching lists
-augroup qfhistory
-    autocmd!
-    autocmd User CHistoryCmdPost echo
-        \ printf('Quickfix %d of %d (%d items): %s',
-        \   getqflist({'nr': 0}).nr,
-        \   getqflist({'nr': '$'}).nr,
-        \   getqflist({'size': 0}).size,
-        \   getqflist({'title': 0}).title
-        \ )
-augroup END
-
-" Automatically open location-list window
-augroup qfhistory
-    autocmd!
-    autocmd User LHistoryCmdPost lwindow
-augroup END
-```
+2. Alternatively, if you're not using the default `Select-mode` mappings
+   (mnemonic: go history):
+   ```vim
+   nnoremap gh <Cmd>Chistory<Cr>
+   nnoremap gH <Cmd>Lhistory<Cr>
+   ```
+3. Print a short info of the selected list in the command-line after switching
+   lists:
+   ```vim
+   augroup qf-history
+       autocmd!
+       autocmd QuickFixCmdPost chistory echo printf('Quickfix %d of %d (%d items): %s',
+           \ getqflist({'nr': 0}).nr,
+           \ getqflist({'nr': '$'}).nr,
+           \ getqflist({'size': 0}).size,
+           \ getqflist({'title': 0}).title
+           \ )
+       autocmd QuickFixCmdPost lhistory echo printf('Location-list %d of %d (%d items): %s',
+           \ getloclist(0, {'nr': 0}).nr,
+           \ getloclist(0, {'nr': '$'}).nr,
+           \ getloclist(0, {'size': 0}).size,
+           \ getloclist(0, {'title': 0}).title
+           \ )
+   augroup END
+   ```
+4. Automatically open the quickfix or location-list window after selecting a
+   list in the popup menu:
+   ```vim
+   augroup qf-history
+       autocmd!
+       autocmd QuickFixCmdPost chistory cwindow
+       autocmd QuickFixCmdPost lhistory lwindow
+   augroup END
+   ```
 
 
 ## Configuration
@@ -87,9 +100,9 @@ augroup END
 ### `g:qfhistory`
 
 The appearance of the popup window can be configured through the dictionary
-variable `g:qfhistory`. The following keys are supported:
+`g:qfhistory`. The following entries are supported:
 
-| Key               | Description                                                         | Default                                    |
+| Entry             | Description                                                         | Default                                    |
 | ----------------- | ------------------------------------------------------------------- | ------------------------------------------ |
 | `title`           | Whether to show a popup window title (`0` or `1`).                  | `1`                                        |
 | `padding`         | List with numbers defining the padding inside the popup window.     | `[1, 1, 1, 1]`                             |
@@ -113,25 +126,6 @@ highlight groups:
 | `QfHistoryEmpty`    | Empty error list.                         | `Comment` |
 
 ### Examples
-
-#### Mappings
-
-Open `quickfix` and `location-list` history with
-<kbd>Leader</kbd>+<kbd>c</kbd>+<kbd>h</kbd> and
-<kbd>Leader</kbd>+<kbd>l</kbd>+<kbd>h</kbd>, respectively:
-```vim
-nnoremap <Leader>ch :<C-u>Chistory<CR>
-nnoremap <Leader>lh :<C-u>Lhistory<CR>
-```
-
-Or alternatively, if you're not using the default `Select-mode` mappings
-(mnemonic: go history):
-```vim
-nnoremap gh :<C-u>Chistory<CR>
-nnoremap gH :<C-u>Lhistory<CR>
-```
-
-#### Appearance
 
 ![img][image-examples]
 
@@ -162,24 +156,15 @@ let g:qfhistory = {
 
 ## Installation
 
-#### Manual Installation
-
 Run the following commands in your terminal:
 ```bash
 $ cd ~/.vim/pack/git-plugins/start
 $ git clone https://github.com/bfrg/vim-qf-history
-$ vim -u NONE -c "helptags vim-qf-history/doc" -c quit
+$ vim -u NONE -c 'helptags vim-qf-history/doc | quit'
 ```
 **Note:** The directory name `git-plugins` is arbitrary, you can pick any other
-name. For more details see <kbd>:help packages</kbd>.
-
-#### Plugin Managers
-
-Assuming [vim-plug][plug] is your favorite plugin manager, add the following to
-your `vimrc`:
-```vim
-Plug 'bfrg/vim-qf-history'
-```
+name. For more details see `:help packages`. Alternatively, use your favorite
+plugin manager.
 
 
 ## Credits
@@ -190,9 +175,8 @@ written by [Nick Jensen][nickspoons].
 
 ## License
 
-Distributed under the same terms as Vim itself. See <kbd>:help license</kbd>.
+Distributed under the same terms as Vim itself. See `:help license`.
 
 [vimways]: https://vimways.org/2018/colder-quickfix-lists
 [nickspoons]: https://github.com/nickspoons
 [image-examples]: https://user-images.githubusercontent.com/6266600/74968239-cb01d800-541a-11ea-87f6-cb6ba9829395.png
-[plug]: https://github.com/junegunn/vim-plug

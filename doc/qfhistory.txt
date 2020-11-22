@@ -7,8 +7,8 @@ License:    Same terms as Vim itself (see |license|)
 ==============================================================================
 INTRODUCTION                                                       *qfhistory*
 
-Plugin to quickly navigate Vim's |quickfix| and |location-list| history using
-a popup menu. See |quickfix-error-lists|.
+Quickly navigate Vim's |quickfix| and |location-list| history using a popup
+menu. See |quickfix-error-lists|.
 
 ==============================================================================
 USAGE                                                        *qfhistory-usage*
@@ -18,14 +18,15 @@ Commands ~
 :Chistory                                                          *:Chistory*
             Display the |quickfix| history in a popup window and make the
             selected list the current list, similar to |:chistory|.
-            If the quickfix list is switched, the |User| autocommand
-            |CHistoryCmdPost| is executed. See also examples below.
+            If the quickfix list is switched, the |QuickFixCmdPost| event is
+            executed with the pattern "chistory". See examples below on how to
+            set appropriate autocommands.
 
 :Lhistory                                                          *:Lhistory*
             Same as |:Chistory|, but display the |location-list| history of
             the current window. This is similar to |:lhistory|.
-            If the location-list is switched, the user autocommand
-            |LHistoryCmdPost| is executed.
+            If the location-list is switched, the |QuickFixCmdPost| event is
+            executed with the pattern "listory".
 
                                                     *qfhistory-popup-mappings*
 Popup window mappings ~
@@ -41,45 +42,53 @@ q           Cancel the popup menu.
 <Enter>     Accept current selection. Makes the selected list the current
             list.
 
-Autocommands ~
+Examples ~
 
-CHistoryCmdPost                                              *CHistoryCmdPost*
-            |User| autocommand that is executed after switching the |quickfix|
-            list through the popup menu. Example: >
-                " Print quickfix info of current list in command-line
-                augroup qfhistory
-                  autocmd!
-                  autocmd User CHistoryCmdPost echo
-                      \ printf('Quickfix %d of %d (%d items): %s',
-                      \   getqflist({'nr': 0}).nr,
-                      \   getqflist({'nr': '$'}).nr,
-                      \   getqflist({'size': 0}).size,
-                      \   getqflist({'title': 0}).title
-                      \ )
-                augroup END
+1. Open quickfix and location-list history: >
+    nnoremap <Leader>ch <Cmd>Chistory<Cr>
+    nnoremap <Leader>lh <Cmd>Lhistory<Cr>
 <
-LHistoryCmdPost                                              *LHistoryCmdPost*
-            Same as |CHistoryCmdPost| but when the |location-list| is changed.
-            Example: >
-                augroup qfhistory
-                    autocmd!
-                    autocmd User LHistoryCmdPost lwindow
-                augroup END
+2. Print a short info of the selected list in the command-line after switching
+   lists: >
+    augroup qf-history
+        autocmd!
+        autocmd QuickFixCmdPost chistory echo
+            \ printf('Quickfix %d of %d (%d items): %s',
+            \   getqflist({'nr': 0}).nr,
+            \   getqflist({'nr': '$'}).nr,
+            \   getqflist({'size': 0}).size,
+            \   getqflist({'title': 0}).title
+            \ )
+        autocmd QuickFixCmdPost lhistory echo
+            \ printf('Location-list %d of %d (%d items): %s',
+            \   getqflist({'nr': 0}).nr,
+            \   getqflist({'nr': '$'}).nr,
+            \   getqflist({'size': 0}).size,
+            \   getqflist({'title': 0}).title
+            \ )
+    augroup END
+<
+3. Open the quickfix or location-list window after selecting a list in the
+   popup menu: >
+     augroup qfhistory
+         autocmd!
+         autocmd QuickFixCmdPost chistory cwindow
+         autocmd QuickFixCmdPost lhistory lwindow
+     augroup END
 <
 ==============================================================================
 CONFIGURATION                                               *qfhistory-config*
-
-g:qfhistory                                                      *g:qfhistory*
+                                                                 *g:qfhistory*
 
 The appearance of the popup window can be configured through the |Dictionary|
 variable g:qfhistory. The following keys are supported:
 
-                                                           *qfhistory.padding*
+                                                         *g:qfhistory.padding*
     padding         List with numbers defining the padding inside the popup
                     window: [top, right, bottom, left]
                     Default: [1,1,1,1]
 
-                                                            *qfhistory.border*
+                                                          *g:qfhistory.border*
     border          List with numbers (0 or 1) specifying whether to draw a
                     border around the popup window.
                     Default: [1,1,1,1]
@@ -89,18 +98,18 @@ variable g:qfhistory. The following keys are supported:
                     window title specify a whitespace character in
                     |qfhistory.borderchars|.
 
-                                                       *qfhistory.borderchars*
+                                                     *g:qfhistory.borderchars*
     borderchars     List with characters used for drawing the border around
                     the popup window. Set this entry to [' '] to draw an empty
                     border around the window while keeping the window title.
                     Default: ['─', '│', '─', '│', '┌', '┐', '┘', '└']
 
-                                                   *qfhistory.borderhighlight*
+                                                 *g:qfhistory.borderhighlight*
     borderhighlight List of highlight group names used for drawing the border.
                     See |popup_create-arguments| for more details.
                     Default: same as popup window, see |hl-QfHistory| below.
 
-                                                             *qfhistory.title*
+                                                           *g:qfhistory.title*
     title           Set this to 0 to disable the window title.
                     Default: 1
 
