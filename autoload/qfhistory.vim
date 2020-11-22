@@ -3,7 +3,7 @@
 " File:         autoload/qfhistory.vim
 " Author:       bfrg <https://github.com/bfrg>
 " Website:      https://github.com/bfrg/vim-qf-history
-" Last Change:  Sep 4, 2020
+" Last Change:  Nov 22, 2020
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
 
@@ -12,12 +12,12 @@ scriptencoding utf-8
 let s:cpo_save = &cpoptions
 set cpoptions&vim
 
-hi def link QfHistory           Pmenu
-hi def link QfHistoryHeader     Title
-hi def link QfHistoryCurrent    Title
-hi def link QfHistoryEmpty      Comment
+hi def link QfHistory        Pmenu
+hi def link QfHistoryHeader  Title
+hi def link QfHistoryCurrent Title
+hi def link QfHistoryEmpty   Comment
 
-let s:defaults = {
+const s:defaults = {
         \ 'title': 1,
         \ 'padding': [],
         \ 'border': [],
@@ -25,7 +25,7 @@ let s:defaults = {
         \ 'borderhighlight': []
         \ }
 
-let s:get = {k -> get(get(g:, 'qfhistory', s:defaults), k, get(s:defaults, k))}
+const s:get = {k -> get(get(g:, 'qfhistory', s:defaults), k, get(s:defaults, k))}
 
 function s:popup_callback(loclist, winid, result) abort
     if a:result < 1
@@ -33,7 +33,7 @@ function s:popup_callback(loclist, winid, result) abort
     endif
     silent execute a:result .. (a:loclist ? 'lhistory' : 'chistory')
 
-    let event = (a:loclist ? 'LHistoryCmdPost' : 'CHistoryCmdPost')
+    const event = (a:loclist ? 'LHistoryCmdPost' : 'CHistoryCmdPost')
     if exists('#User#' .. event)
         execute 'doautocmd <nomodeline> User' event
     endif
@@ -59,8 +59,8 @@ function s:popup_filter(loclist, winid, key) abort
 endfunction
 
 function qfhistory#open(loclist) abort
-    let Xgetlist = a:loclist ? function('getloclist', [0]) : function('getqflist')
-    let nr = Xgetlist({'nr': '$'}).nr
+    const Xgetlist = a:loclist ? function('getloclist', [0]) : function('getqflist')
+    const nr = Xgetlist({'nr': '$'}).nr
 
     if !nr
         echo 'No ' .. (a:loclist ? 'location lists for current window' : 'quickfix lists')
@@ -68,7 +68,7 @@ function qfhistory#open(loclist) abort
     endif
 
     " Number of each error type (E, W, I, N) in each quickfix list
-    let qferrors = range(1, nr)
+    const qferrors = range(1, nr)
             \ ->map({_,i -> Xgetlist({'nr': i, 'items': 0}).items->map('v:val.type')})
             \ ->map({_,i -> {
             \   'E': count(i, 'E', 1),
@@ -80,7 +80,7 @@ function qfhistory#open(loclist) abort
             \ })
 
     " Maximum value of each error type in all quickfix lists
-    let max = {
+    const max = {
             \ 'E': copy(qferrors)->map("v:val['E']")->max(),
             \ 'W': copy(qferrors)->map("v:val['W']")->max(),
             \ 'I': copy(qferrors)->map("v:val['I']")->max(),
@@ -90,7 +90,7 @@ function qfhistory#open(loclist) abort
 
     " Columns E/W/I/N/? are shown only when E/W/I/N are non-zero in at least one
     " list
-    let header = 'QF'
+    const header = 'QF'
             \ .. (!max['E'] ? '' : '    E')
             \ .. (!max['W'] ? '' : '    W')
             \ .. (!max['I'] ? '' : '    I')
@@ -98,7 +98,7 @@ function qfhistory#open(loclist) abort
             \ .. (!max['E'] && !max['W'] && !max['I'] && !max['N'] ? '' : '     ?')
             \ .. '   Size   Title'
 
-    let lists = range(1, nr)->map({_,i ->
+    const lists = range(1, nr)->map({_,i ->
             \ printf('%2d', i)
             \ .. (!max['E'] ? '' : printf(' %4s', !qferrors[i-1]['E'] ? '-' : qferrors[i-1]['E']))
             \ .. (!max['W'] ? '' : printf(' %4s', !qferrors[i-1]['W'] ? '-' : qferrors[i-1]['W']))
@@ -109,9 +109,9 @@ function qfhistory#open(loclist) abort
             \ .. printf('   %s', Xgetlist({'nr': i, 'title': 0}).title)
             \ })
 
-    let qflist = extend([header], lists)
+    const qflist = extend([header], lists)
 
-    let winid = popup_create(qflist, {
+    const winid = popup_create(qflist, {
             \ 'padding': s:get('padding'),
             \ 'border': s:get('border'),
             \ 'borderchars': s:get('borderchars'),
@@ -131,7 +131,7 @@ function qfhistory#open(loclist) abort
     call matchadd('QfHistoryHeader', '\%^.*$', 1, -1, {'window': winid})
     for i in range(1, nr)
         if !Xgetlist({'nr': i, 'size': 0}).size
-            let pattern = printf('\%%%dl.*\%%%dc', i+1, winbufnr(winid)->getbufline(i+1)[0]->len())
+            const pattern = printf('\%%%dl.*\%%%dc', i+1, winbufnr(winid)->getbufline(i+1)[0]->len())
             call matchadd('QfHistoryEmpty', pattern, 1, -1, {'window': winid})
         endif
     endfor
