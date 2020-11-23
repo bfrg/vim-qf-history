@@ -4,7 +4,7 @@ vim9script
 # File:         autoload/qfhistory.vim
 # Author:       bfrg <https://github.com/bfrg>
 # Website:      https://github.com/bfrg/vim-qf-history
-# Last Change:  Sep 4, 2020
+# Last Change:  Nov 23, 2020
 # License:      Same as Vim itself (see :h license)
 # ==============================================================================
 
@@ -89,13 +89,13 @@ def qfhistory#open(loclist: bool, opts: dict<any> = {}): number
     endif
 
     # Number of each error type (E, W, I, N, ?) in each quickfix list
-    let qferrors: list<dict<number>> = []
+    var qferrors: list<dict<number>> = []
 
     # Maximum value of each error type in all quickfix lists
-    let max: dict<number> = {'E': 0, 'W': 0, 'I': 0, 'N': 0, '?': 0}
+    var max: dict<number> = {'E': 0, 'W': 0, 'I': 0, 'N': 0, '?': 0}
 
     for i in range(1, nr)
-        let ntypes: dict<number> = {'E': 0, 'W': 0, 'I': 0, 'N': 0, '?': 0}
+        var ntypes: dict<number> = {'E': 0, 'W': 0, 'I': 0, 'N': 0, '?': 0}
 
         for j in Xgetlist({'nr': i, 'items': 0}).items
             if j.type ==? 'E'
@@ -120,10 +120,10 @@ def qfhistory#open(loclist: bool, opts: dict<any> = {}): number
     endfor
 
     # Popup content
-    let lists: list<string> = []
+    var lists: list<string> = []
 
     for i in range(1, nr)
-        let str: string = printf('%2d', i)
+        var str: string = printf('%2d', i)
         str ..= !max['E'] ? '' : printf(' %4s', !qferrors[i - 1]['E'] ? '-' : qferrors[i - 1]['E'])
         str ..= !max['W'] ? '' : printf(' %4s', !qferrors[i - 1]['W'] ? '-' : qferrors[i - 1]['W'])
         str ..= !max['I'] ? '' : printf(' %4s', !qferrors[i - 1]['I'] ? '-' : qferrors[i - 1]['I'])
