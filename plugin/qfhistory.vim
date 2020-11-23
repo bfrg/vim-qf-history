@@ -3,11 +3,11 @@
 " File:         plugin/qfhistory.vim
 " Author:       bfrg <https://github.com/bfrg>
 " Website:      https://github.com/bfrg/vim-qf-history
-" Last Change:  Nov 22, 2020
+" Last Change:  Nov 24, 2020
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
 
-if get(g:, 'loaded_qfhistory') || !has('patch-8.2.1307')
+if get(g:, 'loaded_qfhistory') || !has('patch-8.2.1756')
     finish
 endif
 let g:loaded_qfhistory = 1
