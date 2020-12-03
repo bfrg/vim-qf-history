@@ -3,7 +3,7 @@
 " File:         autoload/qfhistory.vim
 " Author:       bfrg <https://github.com/bfrg>
 " Website:      https://github.com/bfrg/vim-qf-history
-" Last Change:  Nov 23, 2020
+" Last Change:  Dec 3, 2020
 " License:      Same as Vim itself (see :h license)
 " ==============================================================================
 
@@ -131,7 +131,7 @@ function qfhistory#open(loclist) abort
     call matchadd('QfHistoryHeader', '\%^.*$', 1, -1, {'window': winid})
     for i in range(1, nr)
         if !Xgetlist({'nr': i, 'size': 0}).size
-            const pattern = printf('\%%%dl.*\%%%dc', i+1, winbufnr(winid)->getbufline(i+1)[0]->len())
+            let pattern = printf('\%%%dl.*\%%%dc', i+1, winbufnr(winid)->getbufline(i+1)[0]->len())
             call matchadd('QfHistoryEmpty', pattern, 1, -1, {'window': winid})
         endif
     endfor
