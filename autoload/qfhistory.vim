@@ -4,7 +4,7 @@ vim9script
 # File:         autoload/qfhistory.vim
 # Author:       bfrg <https://github.com/bfrg>
 # Website:      https://github.com/bfrg/vim-qf-history
-# Last Change:  Nov 23, 2020
+# Last Change:  Feb 8, 2021
 # License:      Same as Vim itself (see :h license)
 # ==============================================================================
 
@@ -42,11 +42,11 @@ const s:opts: list<string> =<< trim END
     zindex
 END
 
-def s:get(key: string): any
+def Get(key: string): any
     return get(g:, 'qfhistory', s:defaults)->get(key, s:defaults[key])
 enddef
 
-def s:popup_callback(loclist: bool, winid: number, result: number)
+def Popup_callback(loclist: bool, winid: number, result: number)
     if result < 1
         return
     endif
@@ -60,7 +60,7 @@ def s:popup_callback(loclist: bool, winid: number, result: number)
     endif
 enddef
 
-def s:popup_filter(winid: number, key: string): bool
+def Popup_filter(winid: number, key: string): bool
     if key ==# 'j' || key ==# "\<down>"
         win_execute(winid, line('.', winid) == line('$', winid) ? ':2' : 'normal! +')
     elseif key ==# 'k' || key ==# "\<up>"
@@ -146,20 +146,20 @@ def qfhistory#open(loclist: bool, opts: dict<any> = {}): number
 
     const useropts: dict<any> = get(opts, 'popup', {})
         ->copy()
-        ->filter({k, _ -> index(s:opts, k) > -1})
+        ->filter((k, _) => index(s:opts, k) > -1)
 
     const popopts: dict<any> = extend({
-        'padding': s:get('padding'),
-        'border': s:get('border'),
-        'borderchars': s:get('borderchars'),
-        'borderhighlight': s:get('borderhighlight'),
+        'padding': Get('padding'),
+        'border': Get('border'),
+        'borderchars': Get('borderchars'),
+        'borderhighlight': Get('borderhighlight'),
         'cursorline': 1,
         'wrap': v:false,
         'mapping': v:false,
         'highlight': 'QfHistory',
-        'title': s:get('title') ? (loclist ? ' Location-list History' : ' Quickfix History') : '',
-        'callback': funcref('s:popup_callback', [loclist]),
-        'filter': funcref('s:popup_filter'),
+        'title': Get('title') ? (loclist ? ' Location-list History' : ' Quickfix History') : '',
+        'callback': (winid, result) => Popup_callback(loclist, winid, result),
+        'filter': Popup_filter,
         'filtermode': 'n'
     }, useropts)
 
