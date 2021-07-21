@@ -4,7 +4,7 @@ vim9script
 # File:         autoload/qfhistory.vim
 # Author:       bfrg <https://github.com/bfrg>
 # Website:      https://github.com/bfrg/vim-qf-history
-# Last Change:  Jul 21, 2021
+# Last Change:  Jul 22, 2021
 # License:      Same as Vim itself (see :h license)
 # ==============================================================================
 
@@ -22,25 +22,6 @@ const defaults: dict<any> = {
     'borderchars': ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
     'borderhighlight': []
 }
-
-const popup_opts: list<string> =<< trim END
-    pos
-    line
-    col
-    maxheight
-    minheight
-    maxwidth
-    minwidth
-    wrap
-    drag
-    resize
-    close
-    padding
-    border
-    borderchars
-    scrollbar
-    zindex
-END
 
 def Get(key: string): any
     return get(g:, 'qfhistory', defaults)->get(key, defaults[key])
@@ -79,7 +60,7 @@ def Popup_filter(winid: number, key: string): bool
     return true
 enddef
 
-def qfhistory#open(loclist: bool, opts: dict<any> = {}): number
+def qfhistory#open(loclist: bool): number
     const Xgetlist = loclist ? function('getloclist', [0]) : function('getqflist')
     const nr: number = Xgetlist({'nr': '$'}).nr
 
@@ -144,11 +125,7 @@ def qfhistory#open(loclist: bool, opts: dict<any> = {}): number
         .. (!max['E'] && !max['W'] && !max['I'] && !max['N'] ? '' : '     ?')
         .. '   Size   Title'
 
-    const useropts: dict<any> = get(opts, 'popup', {})
-        ->copy()
-        ->filter((key: string, _: any): bool => index(popup_opts, key) > -1)
-
-    const popopts: dict<any> = extend({
+    const winid: number = extend([header], lists)->popup_create({
         'padding': Get('padding'),
         'border': Get('border'),
         'borderchars': Get('borderchars'),
@@ -161,9 +138,7 @@ def qfhistory#open(loclist: bool, opts: dict<any> = {}): number
         'callback': (winid: number, result: number) => Popup_callback(loclist, winid, result),
         'filter': Popup_filter,
         'filtermode': 'n'
-    }, useropts)
-
-    const winid: number = extend([header], lists)->popup_create(popopts)
+    })
 
     popup_filter_menu(winid, 'j')
     matchadd('QfHistoryHeader', '\%^.*$', 1, -1, {'window': winid})
