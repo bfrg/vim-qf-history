@@ -146,7 +146,7 @@ def qfhistory#open(loclist: bool, opts: dict<any> = {}): number
 
     const useropts: dict<any> = get(opts, 'popup', {})
         ->copy()
-        ->filter((k, _) => index(popup_opts, k) > -1)
+        ->filter((key: string, _: any): bool => index(popup_opts, key) > -1)
 
     const popopts: dict<any> = extend({
         'padding': Get('padding'),
@@ -158,7 +158,7 @@ def qfhistory#open(loclist: bool, opts: dict<any> = {}): number
         'mapping': v:false,
         'highlight': 'QfHistory',
         'title': Get('title') ? (loclist ? ' Location-list History' : ' Quickfix History') : '',
-        'callback': (winid, result) => Popup_callback(loclist, winid, result),
+        'callback': (winid: number, result: number) => Popup_callback(loclist, winid, result),
         'filter': Popup_filter,
         'filtermode': 'n'
     }, useropts)
