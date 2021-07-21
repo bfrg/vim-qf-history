@@ -4,7 +4,7 @@ vim9script
 # File:         autoload/qfhistory.vim
 # Author:       bfrg <https://github.com/bfrg>
 # Website:      https://github.com/bfrg/vim-qf-history
-# Last Change:  Feb 8, 2021
+# Last Change:  Jul 21, 2021
 # License:      Same as Vim itself (see :h license)
 # ==============================================================================
 
@@ -15,7 +15,7 @@ hi def link QfHistoryHeader  Title
 hi def link QfHistoryCurrent Title
 hi def link QfHistoryEmpty   Comment
 
-const s:defaults: dict<any> = {
+const defaults: dict<any> = {
     'title': 1,
     'padding': [],
     'border': [],
@@ -23,7 +23,7 @@ const s:defaults: dict<any> = {
     'borderhighlight': []
 }
 
-const s:opts: list<string> =<< trim END
+const popup_opts: list<string> =<< trim END
     pos
     line
     col
@@ -43,7 +43,7 @@ const s:opts: list<string> =<< trim END
 END
 
 def Get(key: string): any
-    return get(g:, 'qfhistory', s:defaults)->get(key, s:defaults[key])
+    return get(g:, 'qfhistory', defaults)->get(key, defaults[key])
 enddef
 
 def Popup_callback(loclist: bool, winid: number, result: number)
@@ -146,7 +146,7 @@ def qfhistory#open(loclist: bool, opts: dict<any> = {}): number
 
     const useropts: dict<any> = get(opts, 'popup', {})
         ->copy()
-        ->filter((k, _) => index(s:opts, k) > -1)
+        ->filter((k, _) => index(popup_opts, k) > -1)
 
     const popopts: dict<any> = extend({
         'padding': Get('padding'),
