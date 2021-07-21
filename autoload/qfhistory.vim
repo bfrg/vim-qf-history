@@ -136,7 +136,7 @@ def qfhistory#open(loclist: bool, opts: dict<any> = {}): number
 
     # Columns E/W/I/N/? are displayed only if at least one list contains
     # non-zero E/W/I/N types
-    const header: string = 'QF'
+    const header: string = (loclist ? 'LL' : 'QF')
         .. (!max['E'] ? '' : '    E')
         .. (!max['W'] ? '' : '    W')
         .. (!max['I'] ? '' : '    I')
