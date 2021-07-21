@@ -15,15 +15,15 @@ hi def link QfHistoryHeader  Title
 hi def link QfHistoryCurrent Title
 hi def link QfHistoryEmpty   Comment
 
-const defaults: dict<any> = {
-    'title': 1,
-    'padding': [],
-    'border': [],
-    'borderchars': ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
-    'borderhighlight': []
-}
+def Getopt(key: string): any
+    const defaults: dict<any> = {
+        'title': 1,
+        'padding': [],
+        'border': [],
+        'borderchars': ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
+        'borderhighlight': []
+    }
 
-def Get(key: string): any
     return get(g:, 'qfhistory', defaults)->get(key, defaults[key])
 enddef
 
@@ -126,15 +126,15 @@ def qfhistory#open(loclist: bool): number
         .. '   Size   Title'
 
     const winid: number = extend([header], lists)->popup_create({
-        'padding': Get('padding'),
-        'border': Get('border'),
-        'borderchars': Get('borderchars'),
-        'borderhighlight': Get('borderhighlight'),
+        'padding': Getopt('padding'),
+        'border': Getopt('border'),
+        'borderchars': Getopt('borderchars'),
+        'borderhighlight': Getopt('borderhighlight'),
         'cursorline': 1,
         'wrap': v:false,
         'mapping': v:false,
         'highlight': 'QfHistory',
-        'title': Get('title') ? (loclist ? ' Location-list History' : ' Quickfix History') : '',
+        'title': Getopt('title') ? (loclist ? ' Location-list History' : ' Quickfix History') : '',
         'callback': (winid: number, result: number) => Popup_callback(loclist, winid, result),
         'filter': Popup_filter,
         'filtermode': 'n'
