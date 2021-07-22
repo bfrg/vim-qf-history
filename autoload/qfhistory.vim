@@ -134,7 +134,7 @@ def qfhistory#open(loclist: bool): number
         'wrap': v:false,
         'mapping': v:false,
         'highlight': 'QfHistory',
-        'title': Getopt('title') ? (loclist ? ' Location-list History' : ' Quickfix History') : '',
+        'title': Getopt('title') ? (loclist ? ' Location-list History ' : ' Quickfix History ') : '',
         'callback': (winid: number, result: number) => Popup_callback(loclist, winid, result),
         'filter': Popup_filter,
         'filtermode': 'n'
