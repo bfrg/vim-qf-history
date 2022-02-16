@@ -4,7 +4,7 @@ vim9script
 # File:         autoload/qfhistory.vim
 # Author:       bfrg <https://github.com/bfrg>
 # Website:      https://github.com/bfrg/vim-qf-history
-# Last Change:  Jul 22, 2021
+# Last Change:  Feb 17, 2022
 # License:      Same as Vim itself (see :h license)
 # ==============================================================================
 
@@ -60,7 +60,7 @@ def Popup_filter(winid: number, key: string): bool
     return true
 enddef
 
-def qfhistory#open(loclist: bool): number
+export def Open(loclist: bool): number
     const Xgetlist = loclist ? function('getloclist', [0]) : function('getqflist')
     const nr: number = Xgetlist({'nr': '$'}).nr
 
