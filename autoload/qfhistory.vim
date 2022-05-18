@@ -4,7 +4,7 @@ vim9script
 # File:         autoload/qfhistory.vim
 # Author:       bfrg <https://github.com/bfrg>
 # Website:      https://github.com/bfrg/vim-qf-history
-# Last Change:  Feb 17, 2022
+# Last Change:  May 18, 2022
 # License:      Same as Vim itself (see :h license)
 # ==============================================================================
 
@@ -17,13 +17,12 @@ hi def link QfHistoryEmpty   Comment
 
 def Getopt(key: string): any
     const defaults: dict<any> = {
-        'title': 1,
-        'padding': [],
-        'border': [],
-        'borderchars': ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
-        'borderhighlight': []
+        title: true,
+        padding: [],
+        border: [],
+        borderchars: ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
+        borderhighlight: []
     }
-
     return get(g:, 'qfhistory', defaults)->get(key, defaults[key])
 enddef
 
@@ -32,12 +31,13 @@ def Popup_callback(loclist: bool, winid: number, result: number)
         return
     endif
 
-    # https://github.com/vim/vim/issues/6530
-    execute printf(':silent :%d%s', result, loclist ? 'lhistory' : 'chistory')
-
     const event: string = loclist ? 'lhistory' : 'chistory'
-    if exists('#QuickFixCmdPost#' .. event)
-        execute 'doautocmd <nomodeline> QuickFixCmdPost' event
+
+    # https://github.com/vim/vim/issues/6530
+    execute $':silent :{result}{event}'
+
+    if exists($'#QuickFixCmdPost#{event}')
+        execute $'doautocmd <nomodeline> QuickFixCmdPost {event}'
     endif
 enddef
 
@@ -62,7 +62,7 @@ enddef
 
 export def Open(loclist: bool): number
     const Xgetlist = loclist ? function('getloclist', [0]) : function('getqflist')
-    const nr: number = Xgetlist({'nr': '$'}).nr
+    const nr: number = Xgetlist({nr: '$'}).nr
 
     if !nr
         echo 'No ' .. (loclist ? 'location lists for current window' : 'quickfix lists')
@@ -73,12 +73,12 @@ export def Open(loclist: bool): number
     var qferrors: list<dict<number>> = []
 
     # Maximum value of each error type in all quickfix lists
-    var max: dict<number> = {'E': 0, 'W': 0, 'I': 0, 'N': 0, '?': 0}
+    var max: dict<number> = {E: 0, W: 0, I: 0, N: 0, '?': 0}
 
     for i in range(1, nr)
-        var ntypes: dict<number> = {'E': 0, 'W': 0, 'I': 0, 'N': 0, '?': 0}
+        var ntypes: dict<number> = {E: 0, W: 0, I: 0, N: 0, '?': 0}
 
-        for j in Xgetlist({'nr': i, 'items': 0}).items
+        for j in Xgetlist({nr: i, items: 0}).items
             if j.type ==? 'E'
                 ntypes['E'] = ntypes['E'] + 1
             elseif j.type ==? 'W'
@@ -110,8 +110,8 @@ export def Open(loclist: bool): number
         str ..= !max['I'] ? '' : printf(' %4s', !qferrors[i - 1]['I'] ? '-' : qferrors[i - 1]['I'])
         str ..= !max['N'] ? '' : printf(' %4s', !qferrors[i - 1]['N'] ? '-' : qferrors[i - 1]['N'])
         str ..= !max['E'] && !max['W'] && !max['I'] && !max['N'] ? '' : printf(' %5s', !qferrors[i - 1]['?'] ? '-' : qferrors[i - 1]['?'])
-        str ..= printf(' %6d', Xgetlist({'nr': i, 'size': 0}).size)
-        str ..= printf('   %s', Xgetlist({'nr': i, 'title': 0}).title)
+        str ..= printf(' %6d', Xgetlist({nr: i, size: 0}).size)
+        str ..= printf('   %s', Xgetlist({nr: i, title: 0}).title)
         add(lists, str)
     endfor
 
@@ -126,35 +126,35 @@ export def Open(loclist: bool): number
         .. '   Size   Title'
 
     const winid: number = extend([header], lists)->popup_create({
-        'padding': Getopt('padding'),
-        'border': Getopt('border'),
-        'borderchars': Getopt('borderchars'),
-        'borderhighlight': Getopt('borderhighlight'),
-        'cursorline': 1,
-        'wrap': v:false,
-        'mapping': v:false,
-        'highlight': 'QfHistory',
-        'title': Getopt('title') ? (loclist ? ' Location-list History ' : ' Quickfix History ') : '',
-        'callback': (winid: number, result: number) => Popup_callback(loclist, winid, result),
-        'filter': Popup_filter,
-        'filtermode': 'n'
+        padding: Getopt('padding'),
+        border: Getopt('border'),
+        borderchars: Getopt('borderchars'),
+        borderhighlight: Getopt('borderhighlight'),
+        cursorline: true,
+        wrap: false,
+        mapping: false,
+        highlight: 'QfHistory',
+        title: Getopt('title') ? (loclist ? ' Location-list History ' : ' Quickfix History ') : '',
+        callback: (winid: number, result: number) => Popup_callback(loclist, winid, result),
+        filter: Popup_filter,
+        filtermode: 'n'
     })
 
     popup_filter_menu(winid, 'j')
-    matchadd('QfHistoryHeader', '\%^.*$', 1, -1, {'window': winid})
+    matchadd('QfHistoryHeader', '\%^.*$', 1, -1, {window: winid})
 
     for i in range(1, nr)
-        if !Xgetlist({'nr': i, 'size': 0}).size
+        if !Xgetlist({nr: i, size: 0}).size
             const pattern: string = printf('\%%%dl.*\%%%dc', i + 1, winbufnr(winid)->getbufline(i + 1)[0]->len())
-            matchadd('QfHistoryEmpty', pattern, 1, -1, {'window': winid})
+            matchadd('QfHistoryEmpty', pattern, 1, -1, {window: winid})
         endif
     endfor
 
     setwinvar(winid, '&signcolumn', 'yes')
-    sign_define('QfCurrent', {'text': '>', 'texthl': 'QfHistoryCurrent'})
+    sign_define('QfCurrent', {text: '>', texthl: 'QfHistoryCurrent'})
     sign_place(0, 'PopUpQfHistory', 'QfCurrent', winbufnr(winid), {
-        'lnum': Xgetlist({'nr': 0}).nr + 1,
-        'priority': 10
+        lnum: Xgetlist({nr: 0}).nr + 1,
+        priority: 10
     })
 
     return winid
