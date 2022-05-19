@@ -4,7 +4,7 @@ vim9script
 # File:         autoload/qfhistory.vim
 # Author:       bfrg <https://github.com/bfrg>
 # Website:      https://github.com/bfrg/vim-qf-history
-# Last Change:  May 18, 2022
+# Last Change:  May 19, 2022
 # License:      Same as Vim itself (see :h license)
 # ==============================================================================
 
@@ -42,19 +42,19 @@ def Popup_callback(loclist: bool, winid: number, result: number)
 enddef
 
 def Popup_filter(winid: number, key: string): bool
-    if key ==# 'j' || key ==# "\<down>"
+    if key == 'j' || key == "\<down>"
         win_execute(winid, line('.', winid) == line('$', winid) ? ':2' : 'normal! +')
-    elseif key ==# 'k' || key ==# "\<up>"
+    elseif key == 'k' || key == "\<up>"
         win_execute(winid, line('.', winid) == 2 ? ':$' : 'normal! -')
-    elseif key ==# 'g' || key ==# "\<home>"
+    elseif key == 'g' || key == "\<home>"
         win_execute(winid, ':2')
-    elseif key ==# 'G' || key ==# "\<end>"
+    elseif key == 'G' || key == "\<end>"
         win_execute(winid, ':$')
-    elseif key =~# '\d'
+    elseif key =~ '\d'
         popup_close(winid, str2nr(key) == 0 ? line('$', winid) - 1 : str2nr(key))
-    elseif key ==# 'q'
+    elseif key == 'q'
         popup_close(winid, -1)
-    elseif key ==# "\<cr>"
+    elseif key == "\<cr>"
         popup_close(winid, line('.', winid) - 1)
     endif
     return true
@@ -80,15 +80,15 @@ export def Open(loclist: bool): number
 
         for j in Xgetlist({nr: i, items: 0}).items
             if j.type ==? 'E'
-                ntypes['E'] = ntypes['E'] + 1
+                ntypes['E'] += 1
             elseif j.type ==? 'W'
-                ntypes['W'] = ntypes['W'] + 1
+                ntypes['W'] += 1
             elseif j.type ==? 'I'
-                ntypes['I'] = ntypes['I'] + 1
+                ntypes['I'] += 1
             elseif j.type ==? 'N'
-                ntypes['N'] = ntypes['N'] + 1
+                ntypes['N'] += 1
             else
-                ntypes['?'] = ntypes['?'] + 1
+                ntypes['?'] += 1
             endif
         endfor
 
