@@ -144,7 +144,7 @@ export def Open(loclist: bool): number
 
     for i in range(1, nr)
         if !Xgetlist({nr: i, size: 0}).size
-            const pattern: string = printf('\%%%dl.*\%%%dc', i + 1, winbufnr(winid)->getbufline(i + 1)[0]->len())
+            const pattern: string = printf('\%%%dl.*\%%%dc', i + 1, winid->winbufnr()->getbufline(i + 1)[0]->len())
             matchadd('QfHistoryEmpty', pattern, 1, -1, {window: winid})
         endif
     endfor
