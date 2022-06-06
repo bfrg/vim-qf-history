@@ -4,7 +4,7 @@ vim9script
 # File:         autoload/qfhistory.vim
 # Author:       bfrg <https://github.com/bfrg>
 # Website:      https://github.com/bfrg/vim-qf-history
-# Last Change:  May 19, 2022
+# Last Change:  Jun 6, 2022
 # License:      Same as Vim itself (see :h license)
 # ==============================================================================
 
@@ -40,9 +40,9 @@ def Popup_callback(loclist: bool, winid: number, result: number)
 enddef
 
 def Popup_filter(winid: number, key: string): bool
-    if key == 'j' || key == "\<down>"
+    if key == 'j' || key == "\<down>" || key == "\<tab>"
         win_execute(winid, line('.', winid) == line('$', winid) ? ':2' : 'normal! +')
-    elseif key == 'k' || key == "\<up>"
+    elseif key == 'k' || key == "\<up>" || key == "\<s-tab>"
         win_execute(winid, line('.', winid) == 2 ? ':$' : 'normal! -')
     elseif key == 'g' || key == "\<home>"
         win_execute(winid, ':2')

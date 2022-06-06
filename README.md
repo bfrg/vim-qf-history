@@ -40,14 +40,19 @@ will execute the `QuickFixCmdPost` event with the pattern `chistory` and
 
 ### Popup mappings
 
-Use <kbd>j</kbd>, <kbd>k</kbd>, <kbd>g</kbd> and <kbd>G</kbd> to move the
-cursorline in the menu, or <kbd>0</kbd> to <kbd>9</kbd> to select the respective
-entry directly. <kbd>0</kbd> will select the last error list in the stack (most
-recent one) if there are less than ten lists. Press <kbd>q</kbd> to cancel the
-popup menu, and <kbd>Enter</kbd> to make the selected list the current list.
+| Key                                           | Description                                                         |
+| --------------------------------------------- | ------------------------------------------------------------------- |
+| <kbd>j</kbd>, <kbd>Down</kbd>, <kbd>Tab</kbd> | Move cursorline down one line.                                      |
+| <kbd>k</kbd>, <kbd>up</kbd>, <kbd>S-Tab</kbd> | Move cursorline up one line.                                        |
+| <kbd>g</kbd>                                  | Move cursorline to top.                                             |
+| <kbd>G</kbd>                                  | Move cursorline to bottom.                                          |
+| <kbd>q</kbd>                                  | Close the popup menu.                                               |
+| <kbd>0</kbd> - <kbd>9</kbd>                   | Make the respective error list the current list.                    |
+| <kbd>Enter</kbd>                              | Accept current selection. Makes the selected list the current list. |
 
 **Note:** Pressing <kbd>0</kbd> to <kbd>9</kbd> will select and automatically
-close the popup window.
+close the popup window. <kbd>0</kbd> will select the 10th error list, or the
+last one in the stack (most recent one) if there are less than ten lists.
 
 ### Examples
 
