@@ -32,9 +32,7 @@ def Popup_callback(loclist: bool, winid: number, result: number)
     endif
 
     const event: string = loclist ? 'lhistory' : 'chistory'
-
-    # https://github.com/vim/vim/issues/6530
-    execute $':silent :{result}{event}'
+    silent execute $':{result}{event}'
 
     if exists($'#QuickFixCmdPost#{event}')
         execute $'doautocmd <nomodeline> QuickFixCmdPost {event}'
@@ -51,7 +49,8 @@ def Popup_filter(winid: number, key: string): bool
     elseif key == 'G' || key == "\<end>"
         win_execute(winid, ':$')
     elseif key =~ '\d'
-        popup_close(winid, str2nr(key) == 0 ? line('$', winid) - 1 : str2nr(key))
+        const nr: number = str2nr(key)
+        popup_close(winid, nr == 0 || nr >= line('$', winid) ? line('$', winid) - 1 : nr)
     elseif key == 'q'
         popup_close(winid, -1)
     elseif key == "\<cr>"
