@@ -71,16 +71,16 @@ close the popup window.
    augroup qf-history
        autocmd!
        autocmd QuickFixCmdPost chistory echo printf('Quickfix %d of %d (%d items): %s',
-           \ getqflist({'nr': 0}).nr,
-           \ getqflist({'nr': '$'}).nr,
-           \ getqflist({'size': 0}).size,
-           \ getqflist({'title': 0}).title
+           \ getqflist({nr: 0}).nr,
+           \ getqflist({nr: '$'}).nr,
+           \ getqflist({size: 0}).size,
+           \ getqflist({title: 0}).title
            \ )
        autocmd QuickFixCmdPost lhistory echo printf('Location-list %d of %d (%d items): %s',
-           \ getloclist(0, {'nr': 0}).nr,
-           \ getloclist(0, {'nr': '$'}).nr,
-           \ getloclist(0, {'size': 0}).size,
-           \ getloclist(0, {'title': 0}).title
+           \ getloclist(0, {nr: 0}).nr,
+           \ getloclist(0, {nr: '$'}).nr,
+           \ getloclist(0, {size: 0}).size,
+           \ getloclist(0, {title: 0}).title
            \ )
    augroup END
    ```
@@ -104,7 +104,7 @@ The appearance of the popup window can be configured through the dictionary
 
 | Entry             | Description                                                         | Default                                    |
 | ----------------- | ------------------------------------------------------------------- | ------------------------------------------ |
-| `title`           | Whether to show a popup window title (`0` or `1`).                  | `1`                                        |
+| `title`           | Whether to show a popup window title (`0` or `1`).                  | `true`                                     |
 | `padding`         | List with numbers defining the padding inside the popup window.     | `[1, 1, 1, 1]`                             |
 | `border`          | List with numbers (`0` or `1`) specifying whether to draw a border. | `[1, 1, 1, 1]`                             |
 | `borderchars`     | List with characters used for drawing the window border.            | `['─', '│', '─', '│', '┌', '┐', '┘', '└']` |
@@ -131,26 +131,26 @@ highlight groups:
 
 **Left:** no window border and no window title:
 ```vim
-let g:qfhistory = {'border': [0, 0, 0, 0], 'title': 0}
+g:qfhistory = {border: [0, 0, 0, 0], title: false}
 ```
 
 **Center:** border with round corners, padding on left and right side:
 ```vim
-let g:qfhistory = {
-    \ 'padding': [0, 1, 0, 1],
-    \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
-    \ 'borderhighlight': ['MyBoldPopupBorder']
-    \ }
+g:qfhistory = {
+    padding: [0, 1, 0, 1],
+    borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+    borderhighlight: ['MyBoldPopupBorder']
+}
 ```
 
 **Right:** same as middle image but without a window title
 ```vim
-let g:qfhistory = {
-    \ 'title': 0,
-    \ 'padding': [0, 1, 0, 1],
-    \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
-    \ 'borderhighlight': ['MyBoldPopupBorder']
-    \ }
+g:qfhistory = {
+    title: false,
+    padding: [0, 1, 0, 1],
+    borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+    borderhighlight: ['MyBoldPopupBorder']
+}
 ```
 
 

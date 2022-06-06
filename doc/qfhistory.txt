@@ -5,13 +5,13 @@ Website:    https://github.com/bfrg/vim-qf-history
 License:    Same terms as Vim itself (see |license|)
 
 ==============================================================================
-INTRODUCTION                                                       *qfhistory*
+INTRODUCTION
 
 Quickly navigate Vim's |quickfix| and |location-list| history using a popup
 menu. See |quickfix-error-lists|.
 
 ==============================================================================
-USAGE                                                        *qfhistory-usage*
+USAGE
 
 Commands ~
 
@@ -54,31 +54,30 @@ Examples ~
         autocmd!
         autocmd QuickFixCmdPost chistory echo
             \ printf('Quickfix %d of %d (%d items): %s',
-            \   getqflist({'nr': 0}).nr,
-            \   getqflist({'nr': '$'}).nr,
-            \   getqflist({'size': 0}).size,
-            \   getqflist({'title': 0}).title
+            \   getqflist({nr: 0}).nr,
+            \   getqflist({nr: '$'}).nr,
+            \   getqflist({size: 0}).size,
+            \   getqflist({title: 0}).title
             \ )
         autocmd QuickFixCmdPost lhistory echo
             \ printf('Location-list %d of %d (%d items): %s',
-            \   getqflist({'nr': 0}).nr,
-            \   getqflist({'nr': '$'}).nr,
-            \   getqflist({'size': 0}).size,
-            \   getqflist({'title': 0}).title
+            \   getqflist({nr: 0}).nr,
+            \   getqflist({nr: '$'}).nr,
+            \   getqflist({size: 0}).size,
+            \   getqflist({title: 0}).title
             \ )
     augroup END
 <
 3. Open the quickfix or location-list window after selecting a list in the
    popup menu: >
-     augroup qfhistory
+     augroup qf-history
          autocmd!
          autocmd QuickFixCmdPost chistory cwindow
          autocmd QuickFixCmdPost lhistory lwindow
      augroup END
 <
 ==============================================================================
-CONFIGURATION                                               *qfhistory-config*
-                                                                 *g:qfhistory*
+CONFIGURATION                                                    *g:qfhistory*
 
 The appearance of the popup window can be configured through the |Dictionary|
 variable g:qfhistory. The following keys are supported:
@@ -86,12 +85,12 @@ variable g:qfhistory. The following keys are supported:
                                                          *g:qfhistory.padding*
     padding         List with numbers defining the padding inside the popup
                     window: [top, right, bottom, left]
-                    Default: [1,1,1,1]
+                    Default: [1, 1, 1, 1]
 
                                                           *g:qfhistory.border*
     border          List with numbers (0 or 1) specifying whether to draw a
                     border around the popup window.
-                    Default: [1,1,1,1]
+                    Default: [1, 1, 1, 1]
 
                     Note: when the top border is disabled, no window title
                     will be shown. If you want an empty border and keep the
@@ -115,26 +114,26 @@ variable g:qfhistory. The following keys are supported:
 
 Examples ~
 >
-    " Don't draw any window border and disable the window title
-    let g:qfhistory = {'border': [0,0,0,0], 'title': 0}
+    # Don't draw any window border and disable the window title
+    g:qfhistory = {border: [0, 0, 0, 0], title: false}
 
-    " Draw an empty border with window title
-    let g:qfhistory = {'border': [], 'borderchars': [' ']}
+    # Draw an empty border with window title
+    g:qfhistory = {border: [], borderchars: [' ']}
 
-    " Draw a border with round corners, no padding inside
-    let g:qfhistory = {
-        \ 'padding': [0,0,0,0],
-        \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
-        \ }
+    # Draw a border with round corners, no padding inside
+    g:qfhistory = {
+        padding: [0, 0, 0, 0],
+        borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
+    }
 
-    " Draw a border with round corners, no window title, use default padding
-    let g:qfhistory = {
-        \ 'title': 0,
-        \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
-        \ }
+    # Draw a border with round corners, no window title, use default padding
+    g:qfhistory = {
+        title: false,
+        borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
+    }
 <
 ==============================================================================
-HIGHLIGHTING                                             *qfhistory-highlight*
+HIGHLIGHTING
 
 The following highlighting groups are used by the plugin:
                                                                 *hl-QfHistory*
