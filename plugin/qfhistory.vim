@@ -4,7 +4,7 @@ vim9script
 # File:         plugin/qfhistory.vim
 # Author:       bfrg <https://github.com/bfrg>
 # Website:      https://github.com/bfrg/vim-qf-history
-# Last Change:  May 18, 2022
+# Last Change:  Dec 23, 2023
 # License:      Same as Vim itself (see :h license)
 # ==============================================================================
 
@@ -13,7 +13,7 @@ if get(g:, 'loaded_qfhistory')
 endif
 g:loaded_qfhistory = 1
 
-import autoload 'qfhistory.vim'
+import autoload '../autoload/qfhistory.vim'
 
 command Chistory qfhistory.Open(false)
 command Lhistory qfhistory.Open(true)
