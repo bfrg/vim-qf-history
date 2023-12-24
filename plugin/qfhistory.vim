@@ -8,11 +8,6 @@ vim9script
 # License:      Same as Vim itself (see :h license)
 # ==============================================================================
 
-if get(g:, 'loaded_qfhistory')
-    finish
-endif
-g:loaded_qfhistory = 1
-
 import autoload '../autoload/qfhistory.vim'
 
 command Chistory qfhistory.Open(false)
